@@ -10,6 +10,11 @@ principios SOLID **siguiendo la misma arquitectura del ejemplo 5 de
 Inversión de Dependencias visto en la teoría** (`IProductRepository` /
 `ProductRepository` / `Factory` / `Service` / `ClientMain`).
 
+> **¿Primera vez usando la aplicación?** Ve directo a
+> [`GUIA_DE_USO.md`](GUIA_DE_USO.md): explica paso a paso qué escribir en
+> cada pantalla (login, registro, reglas exactas de la contraseña,
+> mensajes de error) sin necesidad de leer el código.
+
 ## Funcionalidad
 
 - Registro de usuarios: login, nombre completo, rol (Administrador, Autor de

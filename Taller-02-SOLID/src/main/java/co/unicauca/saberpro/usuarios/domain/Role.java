@@ -20,4 +20,12 @@ public enum Role {
     public String getDisplayName() {
         return displayName;
     }
+
+    @Override
+    public String toString() {
+        // JComboBox y otros componentes Swing usan toString() para mostrar
+        // el texto de cada opcion; sin este override se veria "AUTOR_PREGUNTAS"
+        // en vez de "Autor de preguntas".
+        return displayName;
+    }
 }
