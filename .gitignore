@@ -1,0 +1,13 @@
+# Empaquetados / backups locales que no deben ir al repo
+*.rar
+*.zip
+*.7z
+
+# Por si se compila algo en la raiz
+target/
+*.class
+.idea/
+*.iml
+out/
+.vscode/
+.DS_Store
