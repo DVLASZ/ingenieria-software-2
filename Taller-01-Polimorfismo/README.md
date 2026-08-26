@@ -53,6 +53,9 @@ mvn exec:java -Dexec.mainClass=co.unicauca.polimorfismo.Main   # si se agrega ex
 O simplemente abrir el proyecto en IntelliJ IDEA como proyecto Maven y ejecutar
 `Main.java` / los tests desde el IDE.
 
-## Autor
+## Autores
 
-Edward Dávila — edwarddavilas36@gmail.com
+Taller realizado en pareja, según lo permite la guía:
+
+- Edward Dávila — edwarddavilas36@gmail.com
+- Laura Isabel Sánchez Fernández
