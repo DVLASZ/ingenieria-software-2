@@ -134,6 +134,9 @@ en el ejemplo 5 de Inversión de Dependencias visto en la clase teórica.
 mvn test
 ```
 
-## Autor
+## Autores
 
-Edward Dávila — edwarddavilas36@gmail.com
+Taller realizado en pareja, según lo permite la guía:
+
+- Edward Dávila — edwarddavilas36@gmail.com
+- Laura Isabel Sánchez Fernández
