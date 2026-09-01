@@ -79,5 +79,5 @@ transparencia), "página actual".
 
 Taller realizado en pareja:
 
-- Edward Dávila — edwarddavilas36@gmail.com
+- Edward Dávila — edwarddavila@unicauca.edu.co
 - Laura Isabel Sánchez Fernández

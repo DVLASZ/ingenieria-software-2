@@ -37,4 +37,4 @@ Taller 2).
 
 ## Autor
 
-Edward Dávila — edwarddavilas36@gmail.com
+Edward Dávila — edwarddavila@unicauca.edu.co

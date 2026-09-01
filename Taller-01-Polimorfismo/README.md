@@ -57,5 +57,5 @@ O simplemente abrir el proyecto en IntelliJ IDEA como proyecto Maven y ejecutar
 
 Taller realizado en pareja, según lo permite la guía:
 
-- Edward Dávila — edwarddavilas36@gmail.com
+- Edward Dávila — edwarddavila@unicauca.edu.co
 - Laura Isabel Sánchez Fernández
