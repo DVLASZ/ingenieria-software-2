@@ -31,6 +31,11 @@ trata y cómo compilarlo/ejecutarlo.
   Observer. Integra también el login y los roles del Taller 2. Este
   entregable queda congelado tal cual se calificó; el desarrollo sigue
   en [`banco-preguntas-saberpro`](https://github.com/DVLASZ/banco-preguntas-saberpro).
+- [`Taller-05-MicrokernelPipesFilters/`](Taller-05-MicrokernelPipesFilters) —
+  a partir de este taller el código ya no se duplica aquí: la carpeta
+  solo explica qué se hizo (patrones Microkernel y Tuberías y Filtros
+  sobre el banco de preguntas) y enlaza al módulo correspondiente en
+  [`banco-preguntas-saberpro`](https://github.com/DVLASZ/banco-preguntas-saberpro).
 
 ## Entorno
 
@@ -43,7 +48,10 @@ modelado/documentación (como el Taller 3) no requieren compilación, solo
 un lector de Markdown y, opcionalmente, [diagrams.net](https://app.diagrams.net/)
 para abrir el archivo fuente `.drawio`. Cada carpeta indica en su propio
 README los requisitos puntuales adicionales (por ejemplo, SQLite en el
-Taller 2).
+Taller 2). A partir del Taller 5, las carpetas nuevas ya no traen código
+propio — solo un README que explica qué se hizo y enlaza al módulo
+correspondiente en [`banco-preguntas-saberpro`](https://github.com/DVLASZ/banco-preguntas-saberpro),
+donde sí se compila y se ejecuta.
 
 ## Autor
 
