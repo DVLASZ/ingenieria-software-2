@@ -36,6 +36,11 @@ trata y cómo compilarlo/ejecutarlo.
   solo explica qué se hizo (patrones Microkernel y Tuberías y Filtros
   sobre el banco de preguntas) y enlaza al módulo correspondiente en
   [`banco-preguntas-saberpro`](https://github.com/DVLASZ/banco-preguntas-saberpro).
+- [`Taller-06-ApiRestSpringBoot/`](Taller-06-ApiRestSpringBoot) — mismo
+  criterio: la carpeta explica el microservicio REST (Spring Boot + JPA,
+  CRUD de preguntas con GET/POST/PUT/DELETE) y enlaza al módulo
+  `modulo-api-rest` en
+  [`banco-preguntas-saberpro`](https://github.com/DVLASZ/banco-preguntas-saberpro).
 
 ## Entorno
 
