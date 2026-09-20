@@ -131,7 +131,7 @@ muestra:
 | Docente | Generar simulacro, ver reportes de estudiantes, ver estadísticas |
 | Estudiante | Realizar simulacro, ver mi historial, ver mis estadísticas |
 
-## 5. Flujo recomendado para probar la aplicación (por ejemplo, en la sustentación)
+## 5. Flujo recomendado para probar la aplicación
 
 1. Abrir la aplicación (`java -jar target/taller02-solid.jar`).
 2. Clic en **"Registrarse"**.
