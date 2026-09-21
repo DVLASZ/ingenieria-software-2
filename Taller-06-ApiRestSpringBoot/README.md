@@ -6,7 +6,7 @@ Igual que en el Taller 5, el código de este taller **no se duplica aquí**:
 vive en el repositorio del proyecto de curso,
 [`banco-preguntas-saberpro`](https://github.com/DVLASZ/banco-preguntas-saberpro),
 dentro del módulo
-[`modulo-api-rest`](https://github.com/DVLASZ/banco-preguntas-saberpro/tree/main/modulo-api-rest).
+[`modulo-api-rest`](https://github.com/DVLASZ/banco-preguntas-saberpro/tree/taller-6/modulo-api-rest).
 Esta carpeta solo deja constancia de qué se hizo y de dónde revisarlo.
 
 ## Qué se implementó
@@ -33,7 +33,7 @@ no una de ejemplo aparte) en `/api/questions`:
 
 ## Dónde revisarlo
 
-- Código, pruebas y colección de Postman: [`banco-preguntas-saberpro/modulo-api-rest`](https://github.com/DVLASZ/banco-preguntas-saberpro/tree/main/modulo-api-rest)
+- Código, pruebas y colección de Postman: [`banco-preguntas-saberpro/modulo-api-rest`](https://github.com/DVLASZ/banco-preguntas-saberpro/tree/taller-6/modulo-api-rest)
 - Arquitectura, endpoints y cómo ejecutarlo: el `README.md` de ese módulo.
 
 ## Autores
