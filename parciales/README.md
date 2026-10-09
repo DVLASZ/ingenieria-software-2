@@ -5,7 +5,7 @@ documento con la sustentación del proceso.
 
 | Parcial | Corte | Contenido |
 |---|---|---|
-| [Parcial 1](Parcial-01-Corte1) | Primer corte | Proyecto Maven `lisw2_parcial01_davilaE` (banco de preguntas con un pipeline de filtros de validación y pruebas unitarias) y documento `lisw2_parcial01_davilaE.docx` |
+| [Parcial 1](Parcial-01-Corte1) | Primer corte | Enunciado del grupo B, proyecto Maven `lisw2_parcial01_davilaE` (banco de preguntas con un pipeline de filtros de validación y pruebas unitarias) y documento `lisw2_parcial01_davilaE.docx` |
 
 ## Entorno
 
