@@ -9,7 +9,7 @@
 - Laura Isabel Sánchez Fernández
 
 **Repositorio (GitHub):** https://github.com/DVLASZ/ingenieria-software-2
-**Carpeta del taller:** [`Taller-02-SOLID/`](https://github.com/DVLASZ/ingenieria-software-2/tree/main/Taller-02-SOLID)
+**Carpeta del taller:** [`Taller-02-SOLID/`](https://github.com/DVLASZ/ingenieria-software-2/tree/main/talleres/Taller-02-SOLID)
 
 **Fecha de entrega de la guía:** martes 25 de agosto de 2026, 18:00
 
@@ -218,4 +218,4 @@ paso a paso en [`GUIA_DE_USO.md`](GUIA_DE_USO.md).
 
 ## 9. URL del repositorio
 
-https://github.com/DVLASZ/ingenieria-software-2 (carpeta `Taller-02-SOLID/`)
+https://github.com/DVLASZ/ingenieria-software-2 (carpeta `talleres/Taller-02-SOLID/`)

@@ -9,7 +9,7 @@
 - Laura Isabel Sánchez Fernández
 
 **Repositorio (GitHub):** https://github.com/DVLASZ/ingenieria-software-2
-**Carpeta del taller:** [`Taller-03-C4/`](https://github.com/DVLASZ/ingenieria-software-2/tree/main/Taller-03-C4)
+**Carpeta del taller:** [`Taller-03-C4/`](https://github.com/DVLASZ/ingenieria-software-2/tree/main/talleres/Taller-03-C4)
 
 ---
 
@@ -307,4 +307,4 @@ llamada `PreguntaDirecta` como subtipo hermano de `PreguntaSeleccionMultiple`
 
 ## 7. URL del repositorio
 
-https://github.com/DVLASZ/ingenieria-software-2 (carpeta `Taller-03-C4/`)
+https://github.com/DVLASZ/ingenieria-software-2 (carpeta `talleres/Taller-03-C4/`)
