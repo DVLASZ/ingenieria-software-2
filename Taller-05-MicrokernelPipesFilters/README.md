@@ -6,7 +6,7 @@ A partir de este taller, el desarrollo ya no se hace como un ejercicio
 suelto aparte: **todo el código vive directamente en el repositorio del
 proyecto de curso**,
 [`banco-preguntas-saberpro`](https://github.com/DVLASZ/banco-preguntas-saberpro),
-dentro del módulo [`modulo-microkernel`](https://github.com/DVLASZ/banco-preguntas-saberpro/tree/main/monolito/modulos/modulo-microkernel).
+dentro del módulo [`modulo-microkernel`](https://github.com/DVLASZ/banco-preguntas-saberpro/tree/taller-5/modulo-microkernel).
 Esta carpeta solo deja constancia de qué se hizo para este taller y del
 enlace para revisarlo.
 
@@ -31,7 +31,7 @@ enlace para revisarlo.
 
 ## Dónde revisarlo
 
-- Código y pruebas: [`banco-preguntas-saberpro/modulo-microkernel`](https://github.com/DVLASZ/banco-preguntas-saberpro/tree/main/monolito/modulos/modulo-microkernel)
+- Código y pruebas: [`banco-preguntas-saberpro/modulo-microkernel`](https://github.com/DVLASZ/banco-preguntas-saberpro/tree/taller-5/modulo-microkernel)
 - Detalle de arquitectura y decisiones de diseño: ver el `README.md` del
   módulo en ese mismo repositorio.
 
