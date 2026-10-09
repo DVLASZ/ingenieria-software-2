@@ -60,4 +60,4 @@ donde sí se compila y se ejecuta.
 
 ## Autor
 
-Edward Dávila — edwarddavila@unicauca.edu.co
+Edward Esteban Dávila Salazar — edwarddavila@unicauca.edu.co

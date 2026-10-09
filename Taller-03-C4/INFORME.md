@@ -5,7 +5,7 @@
 **Periodo 2-2026**
 
 **Integrantes:**
-- Edward Dávila — edwarddavila@unicauca.edu.co
+- Edward Esteban Dávila Salazar — edwarddavila@unicauca.edu.co
 - Laura Isabel Sánchez Fernández
 
 **Repositorio (GitHub):** https://github.com/DVLASZ/ingenieria-software-2

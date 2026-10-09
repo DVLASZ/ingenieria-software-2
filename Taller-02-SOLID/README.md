@@ -138,5 +138,5 @@ mvn test
 
 Taller realizado en pareja, según lo permite la guía:
 
-- Edward Dávila — edwarddavila@unicauca.edu.co
+- Edward Esteban Dávila Salazar — edwarddavila@unicauca.edu.co
 - Laura Isabel Sánchez Fernández
