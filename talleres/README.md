@@ -11,6 +11,8 @@ Talleres del laboratorio de Ingeniería de Software II. Cada carpeta es un traba
 | [Taller 4](Taller-04-CapasMVC) | Arquitectura en capas, MVC y Observer sobre el banco de preguntas, con el login y los roles del Taller 2 | En esta carpeta, congelado tal como se calificó | |
 | [Taller 5](Taller-05-MicrokernelPipesFilters) | Microkernel y Tuberías y Filtros: generación de preguntas por plugins | En el proyecto, etiqueta [`taller-5`](https://github.com/DVLASZ/banco-preguntas-saberpro/tree/taller-5/modulo-microkernel) | |
 | [Taller 6](Taller-06-ApiRestSpringBoot) | API REST con Spring Boot y JPA: CRUD de preguntas | En el proyecto, etiqueta [`taller-6`](https://github.com/DVLASZ/banco-preguntas-saberpro/tree/taller-6/modulo-api-rest) | |
+| Taller 7 | Lo cuenta la docente como el [Parcial 1](../parciales/Parcial-01-Corte1) | En `parciales/` | |
+| [Taller 8](Taller-08-PatronesDiseno) | Patrones de diseño: Builder, Adapter, Facade, State, Template Method y Decorator sobre un modelo propio de pregunta | En esta carpeta (Parte 1 publicada) | |
 
 ## Criterio para ubicar el código
 

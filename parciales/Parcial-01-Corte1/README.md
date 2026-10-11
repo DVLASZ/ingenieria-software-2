@@ -1,6 +1,7 @@
 # Parcial 1 (primer corte)
 
-Parcial práctico del laboratorio de Ingeniería de Software II.
+Parcial práctico del laboratorio de Ingeniería de Software II. La docente lo cuenta como el Taller 7 del laboratorio
+(el siguiente es el [Taller 8](../../talleres/Taller-08-PatronesDiseno)).
 
 - `lisw2_parcial01_davilaE/`: proyecto Maven con un banco de preguntas en memoria. Valida las preguntas con un
   pipeline de filtros (`FiltroEnunciado`, `FiltroLongitudEnunciado` y `FiltroCompetenciaOficial`) y tiene pruebas
