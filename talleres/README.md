@@ -13,6 +13,7 @@ Talleres del laboratorio de Ingeniería de Software II. Cada carpeta es un traba
 | [Taller 6](Taller-06-ApiRestSpringBoot) | API REST con Spring Boot y JPA: CRUD de preguntas | En el proyecto, etiqueta [`taller-6`](https://github.com/DVLASZ/banco-preguntas-saberpro/tree/taller-6/modulo-api-rest) | |
 | Taller 7 | Lo cuenta la docente como el [Parcial 1](../parciales/Parcial-01-Corte1) | En `parciales/` | |
 | [Taller 8](Taller-08-PatronesDiseno) | Patrones de diseño: Builder, Adapter, Facade, State, Template Method y Decorator sobre un modelo propio de pregunta | En esta carpeta | [`INFORME.md`](Taller-08-PatronesDiseno/INFORME.md) y [`.docx`](Taller-08-PatronesDiseno/lisw2_t8_g2.docx) |
+| [Taller 9](Taller-09-ComunicacionSincronaAsincrona) | Comunicación síncrona (REST) y asíncrona (RabbitMQ) entre nueve microservicios Spring Boot, versión reducida del proyecto | En esta carpeta | |
 
 ## Criterio para ubicar el código
 

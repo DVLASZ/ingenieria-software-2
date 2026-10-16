@@ -1,0 +1,19 @@
+# Maven
+target/
+.mvn/wrapper/maven-wrapper.jar
+
+# IDE
+.idea/
+*.iml
+.vscode/
+.DS_Store
+.classpath
+.project
+.settings/
+
+# Registros
+*.log
+
+# Registros y procesos de los scripts
+logs/
+.mvn/

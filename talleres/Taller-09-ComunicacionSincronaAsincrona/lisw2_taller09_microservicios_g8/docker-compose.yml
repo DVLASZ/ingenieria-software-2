@@ -1,0 +1,17 @@
+# Infraestructura del taller: solo RabbitMQ con la consola de administración.
+# Los servicios se ejecutan con Maven (ver README). Consola: http://localhost:15672 (guest / guest)
+services:
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: saberpro-rabbitmq
+    ports:
+      - "5672:5672"     # AMQP para los microservicios
+      - "15672:15672"   # consola web de administración
+    environment:
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_DEFAULT_PASS: guest
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "-q", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
