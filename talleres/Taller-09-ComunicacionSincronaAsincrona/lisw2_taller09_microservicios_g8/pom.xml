@@ -22,5 +22,7 @@
         <java.version>21</java.version>
     </properties>
 
-    <!-- los módulos se registran a medida que se agrega cada servicio -->
+    <modules>
+        <module>user-service</module>
+    </modules>
 </project>

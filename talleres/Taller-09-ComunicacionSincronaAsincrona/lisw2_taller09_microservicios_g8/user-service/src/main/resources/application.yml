@@ -1,0 +1,33 @@
+server:
+  port: ${SERVER_PORT:8081}
+
+spring:
+  application:
+    name: user-service
+  rabbitmq:
+    host: ${RABBITMQ_HOST:localhost}
+    port: ${RABBITMQ_PORT:5672}
+    username: ${RABBITMQ_USER:guest}
+    password: ${RABBITMQ_PASSWORD:guest}
+    listener:
+      simple:
+        default-requeue-rejected: false
+        retry:
+          enabled: true
+          initial-interval: 1s
+          max-attempts: 3
+          multiplier: 2
+  datasource:
+    url: jdbc:h2:mem:user_db;DB_CLOSE_DELAY=-1
+    username: sa
+    password:
+  jpa:
+    hibernate:
+      ddl-auto: update
+    open-in-view: false
+
+# Nombres de los exchanges (comandos y eventos), iguales en todos los servicios
+app:
+  messaging:
+    direct-exchange: ${DIRECT_EXCHANGE:saberpro.direct.exchange}
+    topic-exchange: ${TOPIC_EXCHANGE:saberpro.topic.exchange}
