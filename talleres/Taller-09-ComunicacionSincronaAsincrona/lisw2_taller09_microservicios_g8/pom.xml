@@ -24,5 +24,6 @@
 
     <modules>
         <module>user-service</module>
+        <module>validation-service</module>
     </modules>
 </project>
