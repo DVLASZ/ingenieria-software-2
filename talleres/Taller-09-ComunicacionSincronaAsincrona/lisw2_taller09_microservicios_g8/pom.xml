@@ -29,5 +29,6 @@
         <module>lifecycle-service</module>
         <module>review-service</module>
         <module>notification-service</module>
+        <module>history-service</module>
     </modules>
 </project>
