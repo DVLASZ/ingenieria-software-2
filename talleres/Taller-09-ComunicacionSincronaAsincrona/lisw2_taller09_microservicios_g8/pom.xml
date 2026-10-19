@@ -30,5 +30,6 @@
         <module>review-service</module>
         <module>notification-service</module>
         <module>history-service</module>
+        <module>simulation-service</module>
     </modules>
 </project>
