@@ -31,5 +31,6 @@
         <module>notification-service</module>
         <module>history-service</module>
         <module>simulation-service</module>
+        <module>tracking-service</module>
     </modules>
 </project>
