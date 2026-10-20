@@ -1,0 +1,3086 @@
+{
+  "info": {
+    "_postman_id": "2a19f424-725f-4e27-8cd0-56ebb11052c1",
+    "name": "SaberPro Microservicios · Taller 09",
+    "description": "Colección del Taller 09 (grupo 8). Una carpeta por microservicio; el orden sigue el escenario completo: login, creación y validación, envío a revisión asíncrono, asignación, evaluación, corrección, publicación, notificaciones, historial, simulacros y seguimiento. Ejecutar con Collection Runner (o newman) de arriba abajo, con los nueve servicios y RabbitMQ levantados. Las URLs están en el entorno SaberPro_Local.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "01 · user-service (:8081)",
+      "description": "",
+      "item": [
+        {
+          "name": "Login válido (autor1)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{user_service_url}}/auth/login",
+              "host": [
+                "{{user_service_url}}"
+              ],
+              "path": [
+                "auth",
+                "login"
+              ]
+            },
+            "description": "Caso de la matriz: login con credenciales válidas.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\"username\": \"autor1\", \"password\": \"clave123\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "id": "299f3df0-da21-4d60-8b29-911bf61fd5ea",
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Código 200\", function () { pm.response.to.have.status(200); });",
+                  "const j = pm.response.json();",
+                  "pm.test(\"Autenticación exitosa\", function () { pm.expect(j.authenticated === true).to.be.true; });",
+                  "pm.test(\"Trae el rol AUTOR\", function () { pm.expect(j.user.roles.includes(\"AUTOR\")).to.be.true; });",
+                  "pm.test(\"Trae un token\", function () { pm.expect(j.token.length > 0).to.be.true; });",
+                  "pm.collectionVariables.set(\"token\", j.token);",
+                  "pm.collectionVariables.set(\"autorId\", j.user.id);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Login válido (administrador)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{user_service_url}}/auth/login",
+              "host": [
+                "{{user_service_url}}"
+              ],
+              "path": [
+                "auth",
+                "login"
+              ]
+            },
+            "description": "",
+            "body": {
+              "mode": "raw",
+              "raw": "{\"username\": \"admin\", \"password\": \"clave123\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "id": "bb10da74-e489-4b8b-af2b-1655524ec4fa",
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Código 200\", function () { pm.response.to.have.status(200); });",
+                  "const j = pm.response.json();",
+                  "pm.test(\"Trae el rol ADMINISTRADOR\", function () { pm.expect(j.user.roles.includes(\"ADMINISTRADOR\")).to.be.true; });",
+                  "pm.collectionVariables.set(\"adminId\", j.user.id);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Revisores elegibles",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{user_service_url}}/users?role=REVISOR&excluir={{autorId}}",
+              "host": [
+                "{{user_service_url}}"
+              ],
+              "path": [
+                "users"
+              ],
+              "query": [
+                {
+                  "key": "role",
+                  "value": "REVISOR"
+                },
+                {
+                  "key": "excluir",
+                  "value": "{{autorId}}"
+                }
+              ]
+            },
+            "description": ""
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "id": "5543fc79-2373-4a95-9e85-714ac1b8c2da",
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Código 200\", function () { pm.response.to.have.status(200); });",
+                  "const j = pm.response.json();",
+                  "pm.test(\"Hay al menos cuatro revisores\", function () { pm.expect(j.length >= 4).to.be.true; });",
+                  "pm.collectionVariables.set(\"rev1\", j[0].id);",
+                  "pm.collectionVariables.set(\"rev2\", j[1].id);",
+                  "pm.collectionVariables.set(\"rev3\", j[2].id);",
+                  "pm.collectionVariables.set(\"rev4\", j[3].id);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Login con credenciales incorrectas",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{user_service_url}}/auth/login",
+              "host": [
+                "{{user_service_url}}"
+              ],
+              "path": [
+                "auth",
+                "login"
+              ]
+            },
+            "description": "Caso de la matriz: login con credenciales incorrectas.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\"username\": \"autor1\", \"password\": \"incorrecta\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "id": "0400475f-bce7-4989-b93f-f49f11fe35b4",
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Código 401\", function () { pm.response.to.have.status(401); });",
+                  "const j = pm.response.json();",
+                  "pm.test(\"Acceso rechazado\", function () { pm.expect(j.authenticated === false).to.be.true; });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Login sin datos",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{user_service_url}}/auth/login",
+              "host": [
+                "{{user_service_url}}"
+              ],
+              "path": [
+                "auth",
+                "login"
+              ]
+            },
+            "description": "",
+            "body": {
+              "mode": "raw",
+              "raw": "{\"username\": \"\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "id": "4c531523-dc37-49f6-bea6-c40574f0f560",
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Código 400\", function () { pm.response.to.have.status(400); });"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "02 · validation-service (:8082)",
+      "description": "",
+      "item": [
+        {
+          "name": "Validar una pregunta correcta",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{validation_service_url}}/validate",
+              "host": [
+                "{{validation_service_url}}"
+              ],
+              "path": [
+                "validate"
+              ]
+            },
+            "description": "",
+            "body": {
+              "mode": "raw",
+              "raw": "{\"autorId\": {{autorId}}, \"titulo\": \"Prueba\", \"contexto\": \"Un texto\", \"pregunta\": \"¿Cuál es la idea?\", \"opciones\": [\"Uno\", \"Dos\", \"Tres\", \"Cuatro\"], \"respuestaCorrecta\": \"A\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "id": "a16f9b98-a932-428c-bb20-015154e033c8",
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Código 200\", function () { pm.response.to.have.status(200); });",
+                  "const j = pm.response.json();",
+                  "pm.test(\"Es válida\", function () { pm.expect(j.valid === true).to.be.true; });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Validar una pregunta inválida",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{validation_service_url}}/validate",
+              "host": [
+                "{{validation_service_url}}"
+              ],
+              "path": [
+                "validate"
+              ]
+            },
+            "description": "Publica además el evento ValidationFailed por RabbitMQ.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\"autorId\": {{autorId}}, \"titulo\": \"Prueba\", \"contexto\": \"\", \"pregunta\": \"sin signo\", \"opciones\": [\"Uno\", \"Dos\", \"Tres\"], \"respuestaCorrecta\": \"A\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "id": "54e2fc2c-8d97-4bbe-93b8-5063829a8774",
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Código 200\", function () { pm.response.to.have.status(200); });",
+                  "const j = pm.response.json();",
+                  "pm.test(\"No es válida\", function () { pm.expect(j.valid === false).to.be.true; });",
+                  "pm.test(\"Informa los errores\", function () { pm.expect(j.errors.length >= 3).to.be.true; });"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "03 · question-service (:8083) · crear y enviar a revisión",
+      "description": "",
+      "item": [
+        {
+          "name": "Crear pregunta válida (pregunta 1)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{question_service_url}}/questions",
+              "host": [
+                "{{question_service_url}}"
+              ],
+              "path": [
+                "questions"
+              ]
+            },
+            "description": "Caso de la matriz: crear pregunta válida. Llama por REST a validation-service y a lifecycle-service.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\"autorId\": {{autorId}}, \"titulo\": \"Energía solar 1\", \"contexto\": \"Un texto breve sobre el uso de la energía solar.\", \"pregunta\": \"¿Cuál es la idea principal del texto?\", \"opciones\": [\"La energía solar es costosa\", \"La energía solar es una alternativa limpia\", \"La energía solar no sirve de noche\", \"La energía solar es nueva\"], \"respuestaCorrecta\": \"B\", \"justificacion\": \"El texto destaca que es una alternativa limpia.\", \"bibliografia\": \"Texto de ejemplo\", \"competencia\": \"Lectura crítica\", \"tema\": \"Idea principal\", \"subtema\": \"Argumentación\", \"dificultad\": \"Básico\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "id": "ab698979-5fca-4600-a225-3b218ea2e5da",
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Código 201\", function () { pm.response.to.have.status(201); });",
+                  "const j = pm.response.json();",
+                  "pm.test(\"Queda en Borrador\", function () { pm.expect(j.estado === \"BORRADOR\").to.be.true; });",
+                  "pm.test(\"Equivale a DRAFT\", function () { pm.expect(j.equivalente === \"DRAFT\").to.be.true; });",
+                  "pm.collectionVariables.set(\"q1\", j.id);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Crear con un usuario que no es autor",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{question_service_url}}/questions",
+              "host": [
+                "{{question_service_url}}"
+              ],
+              "path": [
+                "questions"
+              ]
+            },
+            "description": "question-service consulta a user-service por REST y rechaza a quien no tiene el rol AUTOR.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\"autorId\": {{rev1}}, \"titulo\": \"Sin rol de autor\", \"contexto\": \"Un texto breve sobre el uso de la energía solar.\", \"pregunta\": \"¿Cuál es la idea principal del texto?\", \"opciones\": [\"La energía solar es costosa\", \"La energía solar es una alternativa limpia\", \"La energía solar no sirve de noche\", \"La energía solar es nueva\"], \"respuestaCorrecta\": \"B\", \"justificacion\": \"El texto destaca que es una alternativa limpia.\", \"bibliografia\": \"Texto de ejemplo\", \"competencia\": \"Lectura crítica\", \"tema\": \"Idea principal\", \"subtema\": \"Argumentación\", \"dificultad\": \"Básico\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "id": "8c877ba6-2a8f-4fc4-8bed-098693b84c36",
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Código 403\", function () { pm.response.to.have.status(403); });",
+                  "const j = pm.response.json();",
+                  "pm.test(\"Solo un autor puede crear preguntas\", function () { pm.expect(j.message.includes(\"no es un autor\")).to.be.true; });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Crear sin el encabezado Authorization",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{question_service_url}}/questions",
+              "host": [
+                "{{question_service_url}}"
+              ],
+              "path": [
+                "questions"
+              ]
+            },
+            "description": "",
+            "body": {
+              "mode": "raw",
+              "raw": "{\"autorId\": {{autorId}}, \"titulo\": \"Sin token\", \"contexto\": \"Un texto breve sobre el uso de la energía solar.\", \"pregunta\": \"¿Cuál es la idea principal del texto?\", \"opciones\": [\"La energía solar es costosa\", \"La energía solar es una alternativa limpia\", \"La energía solar no sirve de noche\", \"La energía solar es nueva\"], \"respuestaCorrecta\": \"B\", \"justificacion\": \"El texto destaca que es una alternativa limpia.\", \"bibliografia\": \"Texto de ejemplo\", \"competencia\": \"Lectura crítica\", \"tema\": \"Idea principal\", \"subtema\": \"Argumentación\", \"dificultad\": \"Básico\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "id": "bb78c1e6-597b-4c11-9ed1-0777e7034b2c",
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Código 401\", function () { pm.response.to.have.status(401); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Crear pregunta inválida (tres opciones)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{question_service_url}}/questions",
+              "host": [
+                "{{question_service_url}}"
+              ],
+              "path": [
+                "questions"
+              ]
+            },
+            "description": "Caso de la matriz: crear pregunta inválida. No se registra como válida.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\"autorId\": {{autorId}}, \"titulo\": \"Inválida\", \"contexto\": \"Un texto breve sobre el uso de la energía solar.\", \"pregunta\": \"¿Cuál es la idea principal del texto?\", \"opciones\": [\"La energía solar es costosa\", \"La energía solar es una alternativa limpia\", \"La energía solar no sirve de noche\"], \"respuestaCorrecta\": \"B\", \"justificacion\": \"El texto destaca que es una alternativa limpia.\", \"bibliografia\": \"Texto de ejemplo\", \"competencia\": \"Lectura crítica\", \"tema\": \"Idea principal\", \"subtema\": \"Argumentación\", \"dificultad\": \"Básico\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "id": "24fb240b-96ee-4f8d-aae2-5f916fcfb695",
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Código 400\", function () { pm.response.to.have.status(400); });",
+                  "const j = pm.response.json();",
+                  "pm.test(\"Informa los errores\", function () { pm.expect(j.errors.length > 0).to.be.true; });",
+                  "pm.test(\"Dice que no es válida\", function () { pm.expect(j.message.includes(\"no es válida\")).to.be.true; });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Crear pregunta 2",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{question_service_url}}/questions",
+              "host": [
+                "{{question_service_url}}"
+              ],
+              "path": [
+                "questions"
+              ]
+            },
+            "description": "",
+            "body": {
+              "mode": "raw",
+              "raw": "{\"autorId\": {{autorId}}, \"titulo\": \"Energía solar 2\", \"contexto\": \"Un texto breve sobre el uso de la energía solar.\", \"pregunta\": \"¿Cuál es la idea principal del texto?\", \"opciones\": [\"La energía solar es costosa\", \"La energía solar es una alternativa limpia\", \"La energía solar no sirve de noche\", \"La energía solar es nueva\"], \"respuestaCorrecta\": \"B\", \"justificacion\": \"El texto destaca que es una alternativa limpia.\", \"bibliografia\": \"Texto de ejemplo\", \"competencia\": \"Lectura crítica\", \"tema\": \"Idea principal\", \"subtema\": \"Argumentación\", \"dificultad\": \"Básico\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "id": "df367aa7-c7ae-4542-ada4-b87d18a6184f",
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Código 201\", function () { pm.response.to.have.status(201); });",
+                  "const j = pm.response.json();",
+                  "pm.collectionVariables.set(\"q2\", j.id);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Crear pregunta 3 (se queda en Borrador)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{question_service_url}}/questions",
+              "host": [
+                "{{question_service_url}}"
+              ],
+              "path": [
+                "questions"
+              ]
+            },
+            "description": "",
+            "body": {
+              "mode": "raw",
+              "raw": "{\"autorId\": {{autorId}}, \"titulo\": \"Energía solar 3\", \"contexto\": \"Un texto breve sobre el uso de la energía solar.\", \"pregunta\": \"¿Cuál es la idea principal del texto?\", \"opciones\": [\"La energía solar es costosa\", \"La energía solar es una alternativa limpia\", \"La energía solar no sirve de noche\", \"La energía solar es nueva\"], \"respuestaCorrecta\": \"B\", \"justificacion\": \"El texto destaca que es una alternativa limpia.\", \"bibliografia\": \"Texto de ejemplo\", \"competencia\": \"Lectura crítica\", \"tema\": \"Idea principal\", \"subtema\": \"Argumentación\", \"dificultad\": \"Básico\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "id": "7eddbd6a-a404-4c9e-9b18-b53e90f13510",
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Código 201\", function () { pm.response.to.have.status(201); });",
+                  "const j = pm.response.json();",
+                  "pm.collectionVariables.set(\"q3\", j.id);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Listar las preguntas en Borrador",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{question_service_url}}/questions?estado=BORRADOR&autorId={{autorId}}",
+              "host": [
+                "{{question_service_url}}"
+              ],
+              "path": [
+                "questions"
+              ],
+              "query": [
+                {
+                  "key": "estado",
+                  "value": "BORRADOR"
+                },
+                {
+                  "key": "autorId",
+                  "value": "{{autorId}}"
+                }
+              ]
+            },
+            "description": ""
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "id": "7c407c8d-dc35-4937-af06-de01c3d33468",
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Código 200\", function () { pm.response.to.have.status(200); });",
+                  "const j = pm.response.json();",
+                  "pm.test(\"Hay al menos tres\", function () { pm.expect(j.totalElements >= 3).to.be.true; });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Enviar la pregunta 1 a revisión (202)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{question_service_url}}/questions/{{q1}}/submit",
+              "host": [
+                "{{question_service_url}}"
+              ],
+              "path": [
+                "questions",
+                "{{q1}}",
+                "submit"
+              ]
+            },
+            "description": "Publica el comando SubmitQuestionForReview en RabbitMQ y responde 202 sin esperar la transición.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\"requestedBy\": \"{{autorId}}\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "id": "a4dfd7dc-7834-4708-b2e4-d4112a2c72d0",
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Código 202\", function () { pm.response.to.have.status(202); });",
+                  "const j = pm.response.json();",
+                  "pm.test(\"Devuelve el operationId\", function () { pm.expect(j.operationId.length > 0).to.be.true; });",
+                  "pm.test(\"Sigue procesándose\", function () { pm.expect(j.status === \"PROCESSING\").to.be.true; });",
+                  "pm.collectionVariables.set(\"op1\", j.operationId);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Resultado de la operación 1",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{question_service_url}}/operations/{{op1}}",
+              "host": [
+                "{{question_service_url}}"
+              ],
+              "path": [
+                "operations",
+                "{{op1}}"
+              ]
+            },
+            "description": "La transición a PENDIENTE_REVISION se procesó de forma asíncrona."
+          },
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "id": "c49bdf1c-2223-4b54-83e1-ab093363db89",
+                "type": "text/javascript",
+                "exec": [
+                  "// espera a que el mensaje de RabbitMQ se procese",
+                  "const _ini = Date.now(); while (Date.now() - _ini < 1500) {}"
+                ]
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "id": "f91fafb8-e1dc-4000-b077-ce8116482ab3",
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Código 200\", function () { pm.response.to.have.status(200); });",
+                  "const j = pm.response.json();",
+                  "pm.test(\"Se completó\", function () { pm.expect(j.status === \"COMPLETED\").to.be.true; });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Enviar la pregunta 1 otra vez",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{question_service_url}}/questions/{{q1}}/submit",
+              "host": [
+                "{{question_service_url}}"
+              ],
+              "path": [
+                "questions",
+                "{{q1}}",
+                "submit"
+              ]
+            },
+            "description": "El servicio acepta la solicitud, pero la transición ya no es válida.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\"requestedBy\": \"{{autorId}}\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "id": "169da9c8-b9a7-4415-a030-1544e7bcd792",
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Código 202\", function () { pm.response.to.have.status(202); });",
+                  "const j = pm.response.json();",
+                  "pm.collectionVariables.set(\"op1b\", j.operationId);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Resultado: la transición falla",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{question_service_url}}/operations/{{op1b}}",
+              "host": [
+                "{{question_service_url}}"
+              ],
+              "path": [
+                "operations",
+                "{{op1b}}"
+              ]
+            },
+            "description": "Caso de la matriz: falla el procesamiento de una transición asíncrona; no se informa que se completó."
+          },
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "id": "c5e858f9-8686-46b2-b269-a1f146d2c532",
+                "type": "text/javascript",
+                "exec": [
+                  "// espera a que el mensaje de RabbitMQ se procese",
+                  "const _ini = Date.now(); while (Date.now() - _ini < 1500) {}"
+                ]
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "id": "f38442e0-8fe3-4c64-a065-1df7834636cb",
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Código 200\", function () { pm.response.to.have.status(200); });",
+                  "const j = pm.response.json();",
+                  "pm.test(\"Quedó FAILED\", function () { pm.expect(j.status === \"FAILED\").to.be.true; });",
+                  "pm.test(\"Explica el motivo\", function () { pm.expect(j.mensaje.includes(\"Pendiente de revisión\")).to.be.true; });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Enviar la pregunta 2 a revisión",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{question_service_url}}/questions/{{q2}}/submit",
+              "host": [
+                "{{question_service_url}}"
+              ],
+              "path": [
+                "questions",
+                "{{q2}}",
+                "submit"
+              ]
+            },
+            "description": "",
+            "body": {
+              "mode": "raw",
+              "raw": "{\"requestedBy\": \"{{autorId}}\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "id": "ccb4a84d-4fa1-491b-81d4-ddbae614c677",
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Código 202\", function () { pm.response.to.have.status(202); });",
+                  "const j = pm.response.json();",
+                  "pm.collectionVariables.set(\"op2\", j.operationId);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Resultado de la operación 2",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{question_service_url}}/operations/{{op2}}",
+              "host": [
+                "{{question_service_url}}"
+              ],
+              "path": [
+                "operations",
+                "{{op2}}"
+              ]
+            },
+            "description": ""
+          },
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "id": "86b5b65e-2c39-443e-bd86-09a48c2c8fbe",
+                "type": "text/javascript",
+                "exec": [
+                  "// espera a que el mensaje de RabbitMQ se procese",
+                  "const _ini = Date.now(); while (Date.now() - _ini < 1500) {}"
+                ]
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "id": "c408006a-e37b-4d31-a679-58bc92afd175",
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Código 200\", function () { pm.response.to.have.status(200); });",
+                  "const j = pm.response.json();",
+                  "pm.test(\"Se completó\", function () { pm.expect(j.status === \"COMPLETED\").to.be.true; });"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "04 · lifecycle-service (:8084)",
+      "description": "",
+      "item": [
+        {
+          "name": "Estado de la pregunta 1",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{lifecycle_service_url}}/lifecycle/{{q1}}",
+              "host": [
+                "{{lifecycle_service_url}}"
+              ],
+              "path": [
+                "lifecycle",
+                "{{q1}}"
+              ]
+            },
+            "description": ""
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "id": "181c085a-5e17-4147-b9a8-d210048306cb",
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Código 200\", function () { pm.response.to.have.status(200); });",
+                  "const j = pm.response.json();",
+                  "pm.test(\"Está Pendiente de revisión\", function () { pm.expect(j.estado === \"PENDIENTE_REVISION\").to.be.true; });",
+                  "pm.test(\"Equivale a PENDING_REVIEW\", function () { pm.expect(j.equivalente === \"PENDING_REVIEW\").to.be.true; });",
+                  "pm.test(\"Tiene historial\", function () { pm.expect(j.historial.length >= 2).to.be.true; });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Aprobar una pregunta en Borrador",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{lifecycle_service_url}}/lifecycle/{{q3}}/transition",
+              "host": [
+                "{{lifecycle_service_url}}"
+              ],
+              "path": [
+                "lifecycle",
+                "{{q3}}",
+                "transition"
+              ]
+            },
+            "description": "Caso de la matriz: aprobar una pregunta en DRAFT.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\"to\": \"APROBADA\", \"requestedBy\": \"{{rev1}}\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "id": "e6c2879c-13f8-4441-9aba-a725cfb0c00d",
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Código 409\", function () { pm.response.to.have.status(409); });",
+                  "const j = pm.response.json();",
+                  "pm.test(\"Transición rechazada\", function () { pm.expect(j.message.includes(\"Transición no permitida\")).to.be.true; });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Aprobar una pregunta en Borrador (ruta de la guía)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{lifecycle_service_url}}/lifecycle/transition",
+              "host": [
+                "{{lifecycle_service_url}}"
+              ],
+              "path": [
+                "lifecycle",
+                "transition"
+              ]
+            },
+            "description": "Misma regla por la ruta POST /lifecycle/transition que usa la guía del taller.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\"questionId\": {{q3}}, \"to\": \"APROBADA\", \"requestedBy\": \"{{rev1}}\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "id": "6de9663f-0351-4872-9878-244cd128e7d6",
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Código 409\", function () { pm.response.to.have.status(409); });",
+                  "const j = pm.response.json();",
+                  "pm.test(\"Transición rechazada\", function () { pm.expect(j.message.includes(\"Transición no permitida\")).to.be.true; });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Resultado de la operación 1 en lifecycle",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{lifecycle_service_url}}/lifecycle/operations/{{op1}}",
+              "host": [
+                "{{lifecycle_service_url}}"
+              ],
+              "path": [
+                "lifecycle",
+                "operations",
+                "{{op1}}"
+              ]
+            },
+            "description": ""
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "id": "7b99a27e-0ecc-4aed-a9ad-d42980c88f53",
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Código 200\", function () { pm.response.to.have.status(200); });",
+                  "const j = pm.response.json();",
+                  "pm.test(\"Se completó\", function () { pm.expect(j.status === \"COMPLETED\").to.be.true; });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Estado de una pregunta inexistente",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{lifecycle_service_url}}/lifecycle/987654321",
+              "host": [
+                "{{lifecycle_service_url}}"
+              ],
+              "path": [
+                "lifecycle",
+                "987654321"
+              ]
+            },
+            "description": ""
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "id": "8712d47f-b0e9-48d7-8dac-491713862646",
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Código 404\", function () { pm.response.to.have.status(404); });"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "05 · review-service (:8085) · asignar y evaluar",
+      "description": "",
+      "item": [
+        {
+          "name": "Asignar sin revisores",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{review_service_url}}/reviews/assign",
+              "host": [
+                "{{review_service_url}}"
+              ],
+              "path": [
+                "reviews",
+                "assign"
+              ]
+            },
+            "description": "",
+            "body": {
+              "mode": "raw",
+              "raw": "{\"questionId\": {{q1}}, \"reviewerIds\": [], \"assignedBy\": {{adminId}}}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "id": "c7c5834c-c683-44f0-bafc-1878e8c8604e",
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Código 400\", function () { pm.response.to.have.status(400); });",
+                  "const j = pm.response.json();",
+                  "pm.test(\"Pide de 1 a 3\", function () { pm.expect(j.message.includes(\"entre 1 y 3\")).to.be.true; });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Asignar cuatro revisores",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{review_service_url}}/reviews/assign",
+              "host": [
+                "{{review_service_url}}"
+              ],
+              "path": [
+                "reviews",
+                "assign"
+              ]
+            },
+            "description": "",
+            "body": {
+              "mode": "raw",
+              "raw": "{\"questionId\": {{q1}}, \"reviewerIds\": [{{rev1}}, {{rev2}}, {{rev3}}, {{rev4}}], \"assignedBy\": {{adminId}}}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "id": "50823b9d-5a16-47cd-8a75-d3cce1bd1adc",
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Código 400\", function () { pm.response.to.have.status(400); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Asignar al autor como revisor",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{review_service_url}}/reviews/assign",
+              "host": [
+                "{{review_service_url}}"
+              ],
+              "path": [
+                "reviews",
+                "assign"
+              ]
+            },
+            "description": "",
+            "body": {
+              "mode": "raw",
+              "raw": "{\"questionId\": {{q1}}, \"reviewerIds\": [{{autorId}}], \"assignedBy\": {{adminId}}}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "id": "a5492021-5070-4179-b8d6-d239635b9c39",
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Código 400\", function () { pm.response.to.have.status(400); });",
+                  "const j = pm.response.json();",
+                  "pm.test(\"El autor no puede revisar su pregunta\", function () { pm.expect(j.message.includes(\"autor\")).to.be.true; });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Asignar sin ser administrador",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{review_service_url}}/reviews/assign",
+              "host": [
+                "{{review_service_url}}"
+              ],
+              "path": [
+                "reviews",
+                "assign"
+              ]
+            },
+            "description": "",
+            "body": {
+              "mode": "raw",
+              "raw": "{\"questionId\": {{q1}}, \"reviewerIds\": [{{rev1}}], \"assignedBy\": {{autorId}}}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "id": "ed85f926-4abe-46a4-86dd-9e3daeee6f33",
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Código 403\", function () { pm.response.to.have.status(403); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Asignar a una pregunta que no se envió",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{review_service_url}}/reviews/assign",
+              "host": [
+                "{{review_service_url}}"
+              ],
+              "path": [
+                "reviews",
+                "assign"
+              ]
+            },
+            "description": "",
+            "body": {
+              "mode": "raw",
+              "raw": "{\"questionId\": {{q3}}, \"reviewerIds\": [{{rev1}}], \"assignedBy\": {{adminId}}}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "id": "c5f3abf3-b093-40e2-9267-49b0abe62886",
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Código 404\", function () { pm.response.to.have.status(404); });",
+                  "const j = pm.response.json();",
+                  "pm.test(\"No fue enviada a revisión\", function () { pm.expect(j.message.includes(\"no ha sido enviada\")).to.be.true; });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Aprobar una pregunta que no está en revisión",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{review_service_url}}/reviews/{{q3}}/evaluations",
+              "host": [
+                "{{review_service_url}}"
+              ],
+              "path": [
+                "reviews",
+                "{{q3}}",
+                "evaluations"
+              ]
+            },
+            "description": "Caso de la matriz: aprobar una pregunta en DRAFT. La transición se rechaza.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\"reviewerId\": {{rev1}}, \"decision\": \"APPROVE\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "id": "07984986-8a68-4863-962e-4906d7d64e64",
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Código 409\", function () { pm.response.to.have.status(409); });",
+                  "const j = pm.response.json();",
+                  "pm.test(\"No hay una revisión en curso\", function () { pm.expect(j.message.includes(\"no tiene una revisión en curso\")).to.be.true; });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Asignar dos revisores a la pregunta 1",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{review_service_url}}/reviews/assign",
+              "host": [
+                "{{review_service_url}}"
+              ],
+              "path": [
+                "reviews",
+                "assign"
+              ]
+            },
+            "description": "Caso de la matriz: asignar un revisor a una pregunta elegible. Pide EN_REVISION a lifecycle y publica ReviewerAssigned.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\"questionId\": {{q1}}, \"reviewerIds\": [{{rev1}}, {{rev2}}], \"assignedBy\": {{adminId}}}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "id": "208d2635-41c8-4c37-ad18-d73063b96e5d",
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Código 201\", function () { pm.response.to.have.status(201); });",
+                  "const j = pm.response.json();",
+                  "pm.test(\"Revisión en curso\", function () { pm.expect(j.estado === \"EN_CURSO\").to.be.true; });",
+                  "pm.test(\"Dos asignaciones\", function () { pm.expect(j.asignaciones.length === 2).to.be.true; });",
+                  "pm.test(\"Primera ronda\", function () { pm.expect(j.ronda === 1).to.be.true; });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Revisión de la pregunta 1",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{review_service_url}}/reviews/{{q1}}",
+              "host": [
+                "{{review_service_url}}"
+              ],
+              "path": [
+                "reviews",
+                "{{q1}}"
+              ]
+            },
+            "description": ""
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "id": "e2862527-6dfa-478d-8c6f-9404891dcb00",
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Código 200\", function () { pm.response.to.have.status(200); });",
+                  "const j = pm.response.json();",
+                  "pm.test(\"Una ronda en curso\", function () { pm.expect(j.length === 1 && j[0].estado === \"EN_CURSO\").to.be.true; });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Pendientes del revisor 1",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{review_service_url}}/reviews/assigned?reviewerId={{rev1}}",
+              "host": [
+                "{{review_service_url}}"
+              ],
+              "path": [
+                "reviews",
+                "assigned"
+              ],
+              "query": [
+                {
+                  "key": "reviewerId",
+                  "value": "{{rev1}}"
+                }
+              ]
+            },
+            "description": ""
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "id": "d1d86e87-d2e3-4b75-9e84-c5568c5afb74",
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Código 200\", function () { pm.response.to.have.status(200); });",
+                  "const j = pm.response.json();",
+                  "pm.test(\"Incluye la pregunta 1\", function () { pm.expect(j.some(p => p.questionId == pm.collectionVariables.get(\"q1\"))).to.be.true; });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Revisor 1 aprueba",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{review_service_url}}/reviews/{{q1}}/evaluations",
+              "host": [
+                "{{review_service_url}}"
+              ],
+              "path": [
+                "reviews",
+                "{{q1}}",
+                "evaluations"
+              ]
+            },
+            "description": "",
+            "body": {
+              "mode": "raw",
+              "raw": "{\"reviewerId\": {{rev1}}, \"decision\": \"APPROVE\", \"observation\": \"Cumple los criterios\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "id": "b7718444-bd40-4112-b57c-f56024046b58",
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Código 200\", function () { pm.response.to.have.status(200); });",
+                  "const j = pm.response.json();",
+                  "pm.test(\"Falta el otro revisor\", function () { pm.expect(j.estado === \"EN_CURSO\").to.be.true; });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Revisor 1 evalúa otra vez",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{review_service_url}}/reviews/{{q1}}/evaluations",
+              "host": [
+                "{{review_service_url}}"
+              ],
+              "path": [
+                "reviews",
+                "{{q1}}",
+                "evaluations"
+              ]
+            },
+            "description": "",
+            "body": {
+              "mode": "raw",
+              "raw": "{\"reviewerId\": {{rev1}}, \"decision\": \"APPROVE\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "id": "d0e644d4-38fb-4114-b9f3-409e72937fee",
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Código 409\", function () { pm.response.to.have.status(409); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Revisor 2 aprueba (unanimidad)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{review_service_url}}/reviews/{{q1}}/evaluations",
+              "host": [
+                "{{review_service_url}}"
+              ],
+              "path": [
+                "reviews",
+                "{{q1}}",
+                "evaluations"
+              ]
+            },
+            "description": "",
+            "body": {
+              "mode": "raw",
+              "raw": "{\"reviewerId\": {{rev2}}, \"decision\": \"APPROVE\", \"observation\": \"De acuerdo\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "id": "852834f3-fba4-4450-ac09-c33e9be1d5bf",
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Código 200\", function () { pm.response.to.have.status(200); });",
+                  "const j = pm.response.json();",
+                  "pm.test(\"Ronda cerrada\", function () { pm.expect(j.estado === \"CERRADA\").to.be.true; });",
+                  "pm.test(\"Aprobada por unanimidad\", function () { pm.expect(j.resultado === \"APPROVED\").to.be.true; });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Asignar un revisor a la pregunta 2",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{review_service_url}}/reviews/assign",
+              "host": [
+                "{{review_service_url}}"
+              ],
+              "path": [
+                "reviews",
+                "assign"
+              ]
+            },
+            "description": "",
+            "body": {
+              "mode": "raw",
+              "raw": "{\"questionId\": {{q2}}, \"reviewerIds\": [{{rev1}}], \"assignedBy\": {{adminId}}}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "id": "df0b8d93-df0c-4694-a475-a2793a7a9336",
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Código 201\", function () { pm.response.to.have.status(201); });",
+                  "const j = pm.response.json();",
+                  "pm.test(\"En curso\", function () { pm.expect(j.estado === \"EN_CURSO\").to.be.true; });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Rechazar sin observación",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{review_service_url}}/reviews/{{q2}}/evaluations",
+              "host": [
+                "{{review_service_url}}"
+              ],
+              "path": [
+                "reviews",
+                "{{q2}}",
+                "evaluations"
+              ]
+            },
+            "description": "",
+            "body": {
+              "mode": "raw",
+              "raw": "{\"reviewerId\": {{rev1}}, \"decision\": \"REJECT\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "id": "feca7ba7-ca05-4b23-ab22-43b4f10cdb48",
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Código 400\", function () { pm.response.to.have.status(400); });",
+                  "const j = pm.response.json();",
+                  "pm.test(\"Pide una observación\", function () { pm.expect(j.message.includes(\"observación\")).to.be.true; });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Revisor rechaza con observación",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{review_service_url}}/reviews/{{q2}}/evaluations",
+              "host": [
+                "{{review_service_url}}"
+              ],
+              "path": [
+                "reviews",
+                "{{q2}}",
+                "evaluations"
+              ]
+            },
+            "description": "Caso de la matriz: rechazar una pregunta en IN_REVIEW; queda REJECTED con el motivo.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\"reviewerId\": {{rev1}}, \"decision\": \"REJECT\", \"observation\": \"El enunciado no es claro\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "id": "927b09c8-34a3-45e0-a95a-21d70fc851d6",
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Código 200\", function () { pm.response.to.have.status(200); });",
+                  "const j = pm.response.json();",
+                  "pm.test(\"Ronda cerrada\", function () { pm.expect(j.estado === \"CERRADA\").to.be.true; });",
+                  "pm.test(\"Rechazada\", function () { pm.expect(j.resultado === \"REJECTED\").to.be.true; });"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "06 · question-service (:8083) · resultado de la revisión, corrección y publicación",
+      "description": "",
+      "item": [
+        {
+          "name": "La pregunta 1 quedó Aprobada",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{question_service_url}}/questions/{{q1}}",
+              "host": [
+                "{{question_service_url}}"
+              ],
+              "path": [
+                "questions",
+                "{{q1}}"
+              ]
+            },
+            "description": "La copia del estado se actualiza con el evento question.state-changed."
+          },
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "id": "4bbbbfb8-93f4-4572-8a60-c0548d3ec70a",
+                "type": "text/javascript",
+                "exec": [
+                  "// espera a que el mensaje de RabbitMQ se procese",
+                  "const _ini = Date.now(); while (Date.now() - _ini < 1500) {}"
+                ]
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "id": "58a6c166-fa14-4ef0-8a2f-6f0b533ad6c3",
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Código 200\", function () { pm.response.to.have.status(200); });",
+                  "const j = pm.response.json();",
+                  "pm.test(\"Está Aprobada\", function () { pm.expect(j.estado === \"APROBADA\").to.be.true; });",
+                  "pm.test(\"Equivale a APPROVED\", function () { pm.expect(j.equivalente === \"APPROVED\").to.be.true; });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "La pregunta 2 quedó Rechazada",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{question_service_url}}/questions/{{q2}}",
+              "host": [
+                "{{question_service_url}}"
+              ],
+              "path": [
+                "questions",
+                "{{q2}}"
+              ]
+            },
+            "description": ""
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "id": "2894cd29-dd3d-40b0-a522-dacc195a0f78",
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Código 200\", function () { pm.response.to.have.status(200); });",
+                  "const j = pm.response.json();",
+                  "pm.test(\"Está Rechazada\", function () { pm.expect(j.estado === \"RECHAZADA\").to.be.true; });",
+                  "pm.test(\"Equivale a REJECTED\", function () { pm.expect(j.equivalente === \"REJECTED\").to.be.true; });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Corregir la pregunta rechazada",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{question_service_url}}/questions/{{q2}}",
+              "host": [
+                "{{question_service_url}}"
+              ],
+              "path": [
+                "questions",
+                "{{q2}}"
+              ]
+            },
+            "description": "Caso de la matriz: corregir una pregunta rechazada. Lifecycle la devuelve a BORRADOR.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\"autorId\": {{autorId}}, \"titulo\": \"Energía solar 2 (corregida)\", \"contexto\": \"Un texto breve sobre el uso de la energía solar.\", \"pregunta\": \"¿Cuál es la idea principal del texto?\", \"opciones\": [\"La energía solar es costosa\", \"La energía solar es una alternativa limpia\", \"La energía solar no sirve de noche\", \"La energía solar es nueva\"], \"respuestaCorrecta\": \"B\", \"justificacion\": \"El texto destaca que es una alternativa limpia.\", \"bibliografia\": \"Texto de ejemplo\", \"competencia\": \"Lectura crítica\", \"tema\": \"Idea principal\", \"subtema\": \"Argumentación\", \"dificultad\": \"Básico\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "id": "5d266220-027b-4d04-86ff-fa8a3df9fb1a",
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Código 200\", function () { pm.response.to.have.status(200); });",
+                  "const j = pm.response.json();",
+                  "pm.test(\"Vuelve a Borrador\", function () { pm.expect(j.estado === \"BORRADOR\").to.be.true; });",
+                  "pm.test(\"Sube la versión\", function () { pm.expect(j.version === 2).to.be.true; });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Reenviar la pregunta corregida",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{question_service_url}}/questions/{{q2}}/submit",
+              "host": [
+                "{{question_service_url}}"
+              ],
+              "path": [
+                "questions",
+                "{{q2}}",
+                "submit"
+              ]
+            },
+            "description": "",
+            "body": {
+              "mode": "raw",
+              "raw": "{\"requestedBy\": \"{{autorId}}\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "id": "4b9c5c89-1fd2-43ec-9670-52f12b48a0ba",
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Código 202\", function () { pm.response.to.have.status(202); });",
+                  "const j = pm.response.json();",
+                  "pm.collectionVariables.set(\"op2b\", j.operationId);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Resultado del reenvío",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{question_service_url}}/operations/{{op2b}}",
+              "host": [
+                "{{question_service_url}}"
+              ],
+              "path": [
+                "operations",
+                "{{op2b}}"
+              ]
+            },
+            "description": ""
+          },
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "id": "c3633366-1272-4684-a341-01d68bb0b6a5",
+                "type": "text/javascript",
+                "exec": [
+                  "// espera a que el mensaje de RabbitMQ se procese",
+                  "const _ini = Date.now(); while (Date.now() - _ini < 1500) {}"
+                ]
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "id": "66008aba-6e1a-4a1b-817e-902f05af07f3",
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Código 200\", function () { pm.response.to.have.status(200); });",
+                  "const j = pm.response.json();",
+                  "pm.test(\"Se completó\", function () { pm.expect(j.status === \"COMPLETED\").to.be.true; });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Publicar la pregunta 1",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{question_service_url}}/questions/{{q1}}/publish",
+              "host": [
+                "{{question_service_url}}"
+              ],
+              "path": [
+                "questions",
+                "{{q1}}",
+                "publish"
+              ]
+            },
+            "description": "",
+            "body": {
+              "mode": "raw",
+              "raw": "{\"requestedBy\": \"{{adminId}}\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "id": "086ae5ef-4d34-4815-a521-00208cc0570b",
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Código 202\", function () { pm.response.to.have.status(202); });",
+                  "const j = pm.response.json();",
+                  "pm.collectionVariables.set(\"op3\", j.operationId);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Resultado de la publicación",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{question_service_url}}/operations/{{op3}}",
+              "host": [
+                "{{question_service_url}}"
+              ],
+              "path": [
+                "operations",
+                "{{op3}}"
+              ]
+            },
+            "description": ""
+          },
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "id": "1ee81236-210c-4c71-b158-f82afe20e774",
+                "type": "text/javascript",
+                "exec": [
+                  "// espera a que el mensaje de RabbitMQ se procese",
+                  "const _ini = Date.now(); while (Date.now() - _ini < 1500) {}"
+                ]
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "id": "21976b53-d566-4b60-be7d-bf9ba2b69480",
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Código 200\", function () { pm.response.to.have.status(200); });",
+                  "const j = pm.response.json();",
+                  "pm.test(\"Se completó\", function () { pm.expect(j.status === \"COMPLETED\").to.be.true; });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Archivar la pregunta 3",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{question_service_url}}/questions/{{q3}}/archive",
+              "host": [
+                "{{question_service_url}}"
+              ],
+              "path": [
+                "questions",
+                "{{q3}}",
+                "archive"
+              ]
+            },
+            "description": "",
+            "body": {
+              "mode": "raw",
+              "raw": "{\"requestedBy\": \"{{adminId}}\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "id": "f453e24d-6ab6-49b0-9e67-fcc07f01246b",
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Código 202\", function () { pm.response.to.have.status(202); });",
+                  "const j = pm.response.json();",
+                  "pm.collectionVariables.set(\"op4\", j.operationId);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "La pregunta 3 quedó Archivada",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{question_service_url}}/questions/{{q3}}",
+              "host": [
+                "{{question_service_url}}"
+              ],
+              "path": [
+                "questions",
+                "{{q3}}"
+              ]
+            },
+            "description": ""
+          },
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "id": "89a5deb1-1c05-4a3f-8f2d-1dfa2b4ea94b",
+                "type": "text/javascript",
+                "exec": [
+                  "// espera a que el mensaje de RabbitMQ se procese",
+                  "const _ini = Date.now(); while (Date.now() - _ini < 1500) {}"
+                ]
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "id": "0d67086c-4c0e-4029-b11b-b77a7fe41461",
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Código 200\", function () { pm.response.to.have.status(200); });",
+                  "const j = pm.response.json();",
+                  "pm.test(\"Está Archivada\", function () { pm.expect(j.estado === \"ARCHIVADA\").to.be.true; });"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "07 · lifecycle-service (:8084) · motivo del rechazo y estados finales",
+      "description": "",
+      "item": [
+        {
+          "name": "Lifecycle guardó el motivo del rechazo",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{lifecycle_service_url}}/lifecycle/{{q2}}",
+              "host": [
+                "{{lifecycle_service_url}}"
+              ],
+              "path": [
+                "lifecycle",
+                "{{q2}}"
+              ]
+            },
+            "description": ""
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "id": "0fe54834-0388-45c6-a67e-29eec187552b",
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Código 200\", function () { pm.response.to.have.status(200); });",
+                  "const j = pm.response.json();",
+                  "pm.test(\"Registra el motivo\", function () { pm.expect(j.historial.some(t => t.hasta === \"RECHAZADA\" && t.motivo.includes(\"El enunciado no es claro\"))).to.be.true; });",
+                  "pm.test(\"Volvió a Borrador y se reenvió\", function () { pm.expect(j.estado === \"PENDIENTE_REVISION\").to.be.true; });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "La pregunta 1 quedó Publicada",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{lifecycle_service_url}}/lifecycle/{{q1}}",
+              "host": [
+                "{{lifecycle_service_url}}"
+              ],
+              "path": [
+                "lifecycle",
+                "{{q1}}"
+              ]
+            },
+            "description": ""
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "id": "586caa35-1c1b-4753-a995-b1b3bb7055ca",
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Código 200\", function () { pm.response.to.have.status(200); });",
+                  "const j = pm.response.json();",
+                  "pm.test(\"Está Publicada\", function () { pm.expect(j.estado === \"PUBLICADA\").to.be.true; });",
+                  "pm.test(\"Equivale a PUBLISHED\", function () { pm.expect(j.equivalente === \"PUBLISHED\").to.be.true; });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "La pregunta 3 quedó Archivada",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{lifecycle_service_url}}/lifecycle/{{q3}}",
+              "host": [
+                "{{lifecycle_service_url}}"
+              ],
+              "path": [
+                "lifecycle",
+                "{{q3}}"
+              ]
+            },
+            "description": ""
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "id": "e98bf421-94f4-4f1f-afb8-a5a21f1d7ad1",
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Código 200\", function () { pm.response.to.have.status(200); });",
+                  "const j = pm.response.json();",
+                  "pm.test(\"Está Archivada\", function () { pm.expect(j.estado === \"ARCHIVADA\").to.be.true; });"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "08 · review-service (:8085) · segunda ronda",
+      "description": "",
+      "item": [
+        {
+          "name": "Se abrió la segunda ronda de revisión",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{review_service_url}}/reviews/{{q2}}",
+              "host": [
+                "{{review_service_url}}"
+              ],
+              "path": [
+                "reviews",
+                "{{q2}}"
+              ]
+            },
+            "description": "Tras corregir y reenviar, el evento question.submitted abre una nueva ronda."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "id": "12166929-966a-4ede-8789-b532c3c2d33f",
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Código 200\", function () { pm.response.to.have.status(200); });",
+                  "const j = pm.response.json();",
+                  "pm.test(\"Dos rondas\", function () { pm.expect(j.length === 2).to.be.true; });",
+                  "pm.test(\"La segunda espera asignación\", function () { pm.expect(j[1].ronda === 2 && j[1].estado === \"PENDIENTE_ASIGNACION\").to.be.true; });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Asignar revisores a la segunda ronda",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{review_service_url}}/reviews/assign",
+              "host": [
+                "{{review_service_url}}"
+              ],
+              "path": [
+                "reviews",
+                "assign"
+              ]
+            },
+            "description": "",
+            "body": {
+              "mode": "raw",
+              "raw": "{\"questionId\": {{q2}}, \"reviewerIds\": [{{rev3}}], \"assignedBy\": {{adminId}}}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "id": "94352420-3758-4137-8033-2b5024eac355",
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Código 201\", function () { pm.response.to.have.status(201); });",
+                  "const j = pm.response.json();",
+                  "pm.test(\"Segunda ronda en curso\", function () { pm.expect(j.ronda === 2 && j.estado === \"EN_CURSO\").to.be.true; });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "El revisor 3 aprueba la segunda ronda",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{review_service_url}}/reviews/{{q2}}/evaluations",
+              "host": [
+                "{{review_service_url}}"
+              ],
+              "path": [
+                "reviews",
+                "{{q2}}",
+                "evaluations"
+              ]
+            },
+            "description": "",
+            "body": {
+              "mode": "raw",
+              "raw": "{\"reviewerId\": {{rev3}}, \"decision\": \"APPROVE\", \"observation\": \"Ahora está clara\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "id": "5addff7e-b57b-4854-8a01-a1bacdf3a9c4",
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Código 200\", function () { pm.response.to.have.status(200); });",
+                  "const j = pm.response.json();",
+                  "pm.test(\"Aprobada por unanimidad\", function () { pm.expect(j.estado === \"CERRADA\" && j.resultado === \"APPROVED\").to.be.true; });"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "09 · notification-service (:8086)",
+      "description": "",
+      "item": [
+        {
+          "name": "Notificaciones del revisor 1",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{notification_service_url}}/notifications?destinatario={{rev1}}&tipo=REVIEWER_ASSIGNED",
+              "host": [
+                "{{notification_service_url}}"
+              ],
+              "path": [
+                "notifications"
+              ],
+              "query": [
+                {
+                  "key": "destinatario",
+                  "value": "{{rev1}}"
+                },
+                {
+                  "key": "tipo",
+                  "value": "REVIEWER_ASSIGNED"
+                }
+              ]
+            },
+            "description": "Caso de la matriz: asignación registrada y notificación generada."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "id": "7a112a35-fc83-4f4a-8d38-237d1523a683",
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Código 200\", function () { pm.response.to.have.status(200); });",
+                  "const j = pm.response.json();",
+                  "pm.test(\"Se le avisó de la asignación\", function () { pm.expect(j.some(n => n.questionId == pm.collectionVariables.get(\"q1\"))).to.be.true; });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Notificaciones del autor",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{notification_service_url}}/notifications?destinatario={{autorId}}",
+              "host": [
+                "{{notification_service_url}}"
+              ],
+              "path": [
+                "notifications"
+              ],
+              "query": [
+                {
+                  "key": "destinatario",
+                  "value": "{{autorId}}"
+                }
+              ]
+            },
+            "description": ""
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "id": "c16ca5b4-eff5-4188-89dd-4c11c7f4cb75",
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Código 200\", function () { pm.response.to.have.status(200); });",
+                  "const j = pm.response.json();",
+                  "pm.test(\"Pregunta aprobada\", function () { pm.expect(j.some(n => n.tipo === \"QUESTION_APPROVED\")).to.be.true; });",
+                  "pm.test(\"Pregunta rechazada\", function () { pm.expect(j.some(n => n.tipo === \"QUESTION_REJECTED\")).to.be.true; });",
+                  "pm.test(\"Validación fallida\", function () { pm.expect(j.some(n => n.tipo === \"VALIDATION_FAILED\")).to.be.true; });",
+                  "pm.test(\"Pregunta publicada\", function () { pm.expect(j.some(n => n.tipo === \"QUESTION_PUBLISHED\")).to.be.true; });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Notificaciones del administrador",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{notification_service_url}}/notifications?destinatario={{adminId}}",
+              "host": [
+                "{{notification_service_url}}"
+              ],
+              "path": [
+                "notifications"
+              ],
+              "query": [
+                {
+                  "key": "destinatario",
+                  "value": "{{adminId}}"
+                }
+              ]
+            },
+            "description": ""
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "id": "5339c9a0-5026-40e7-94ac-dfa465859556",
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Código 200\", function () { pm.response.to.have.status(200); });",
+                  "const j = pm.response.json();",
+                  "pm.test(\"Evaluaciones recibidas\", function () { pm.expect(j.some(n => n.tipo === \"EVALUATION_SUBMITTED\")).to.be.true; });"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "10 · history-service (:8087)",
+      "description": "",
+      "item": [
+        {
+          "name": "Historial de la pregunta 1",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{history_service_url}}/history/{{q1}}",
+              "host": [
+                "{{history_service_url}}"
+              ],
+              "path": [
+                "history",
+                "{{q1}}"
+              ]
+            },
+            "description": ""
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "id": "206dfd3b-090b-471e-9af9-3bcac3960b09",
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Código 200\", function () { pm.response.to.have.status(200); });",
+                  "const j = pm.response.json();",
+                  "pm.test(\"Pregunta enviada\", function () { pm.expect(j.some(e => e.tipo === \"QuestionSubmittedForReview\")).to.be.true; });",
+                  "pm.test(\"Revisores asignados\", function () { pm.expect(j.some(e => e.tipo === \"ReviewerAssigned\")).to.be.true; });",
+                  "pm.test(\"Evaluaciones\", function () { pm.expect(j.filter(e => e.tipo === \"EvaluationSubmitted\").length === 2).to.be.true; });",
+                  "pm.test(\"Revisión completada\", function () { pm.expect(j.some(e => e.tipo === \"ReviewCompleted\")).to.be.true; });",
+                  "pm.test(\"Publicada\", function () { pm.expect(j.some(e => e.tipo === \"question.published\")).to.be.true; });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Auditoría de inicios de sesión fallidos",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{history_service_url}}/history/audit?tipo=auth.login-failed",
+              "host": [
+                "{{history_service_url}}"
+              ],
+              "path": [
+                "history",
+                "audit"
+              ],
+              "query": [
+                {
+                  "key": "tipo",
+                  "value": "auth.login-failed"
+                }
+              ]
+            },
+            "description": ""
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "id": "54c49e50-9466-48e1-9cad-fdc9089a3bcc",
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Código 200\", function () { pm.response.to.have.status(200); });",
+                  "const j = pm.response.json();",
+                  "pm.test(\"Hay al menos uno\", function () { pm.expect(j.totalElements >= 1).to.be.true; });"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "11 · simulation-service (:8088)",
+      "description": "",
+      "item": [
+        {
+          "name": "Catálogo de preguntas publicadas",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{simulation_service_url}}/simulations/catalog",
+              "host": [
+                "{{simulation_service_url}}"
+              ],
+              "path": [
+                "simulations",
+                "catalog"
+              ]
+            },
+            "description": ""
+          },
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "id": "bdbc313d-8436-4e91-ae85-e3ace12c5d9e",
+                "type": "text/javascript",
+                "exec": [
+                  "// espera a que el mensaje de RabbitMQ se procese",
+                  "const _ini = Date.now(); while (Date.now() - _ini < 1500) {}"
+                ]
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "id": "9fd01e28-176e-48b2-94bd-e9672ef827ff",
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Código 200\", function () { pm.response.to.have.status(200); });",
+                  "const j = pm.response.json();",
+                  "pm.test(\"Incluye la pregunta publicada\", function () { pm.expect(j.some(p => p.questionId == pm.collectionVariables.get(\"q1\"))).to.be.true; });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Crear un simulacro",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{simulation_service_url}}/simulations",
+              "host": [
+                "{{simulation_service_url}}"
+              ],
+              "path": [
+                "simulations"
+              ]
+            },
+            "description": "",
+            "body": {
+              "mode": "raw",
+              "raw": "{\"userId\": {{autorId}}, \"cantidad\": 1}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "id": "fd93f4a1-001a-42bd-b4bb-d727699f644b",
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Código 201\", function () { pm.response.to.have.status(201); });",
+                  "const j = pm.response.json();",
+                  "pm.test(\"No muestra la respuesta correcta\", function () { pm.expect(j.preguntas[0].respuestaCorrecta === undefined).to.be.true; });",
+                  "pm.collectionVariables.set(\"simId\", j.id);",
+                  "pm.collectionVariables.set(\"simQ\", j.preguntas[0].questionId);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Resolver el simulacro",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{simulation_service_url}}/simulations/{{simId}}/submit",
+              "host": [
+                "{{simulation_service_url}}"
+              ],
+              "path": [
+                "simulations",
+                "{{simId}}",
+                "submit"
+              ]
+            },
+            "description": "",
+            "body": {
+              "mode": "raw",
+              "raw": "{\"respuestas\": [{\"questionId\": {{simQ}}, \"respuesta\": \"B\"}]}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "id": "08276505-2356-4637-afaf-1658891b1841",
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Código 200\", function () { pm.response.to.have.status(200); });",
+                  "const j = pm.response.json();",
+                  "pm.test(\"Puntaje 100\", function () { pm.expect(j.puntaje === 100).to.be.true; });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Resolver otra vez el mismo simulacro",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{simulation_service_url}}/simulations/{{simId}}/submit",
+              "host": [
+                "{{simulation_service_url}}"
+              ],
+              "path": [
+                "simulations",
+                "{{simId}}",
+                "submit"
+              ]
+            },
+            "description": "",
+            "body": {
+              "mode": "raw",
+              "raw": "{\"respuestas\": []}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "id": "b4992241-3bce-43d8-a702-b431faab3331",
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Código 409\", function () { pm.response.to.have.status(409); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Pedir más preguntas de las disponibles",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{simulation_service_url}}/simulations",
+              "host": [
+                "{{simulation_service_url}}"
+              ],
+              "path": [
+                "simulations"
+              ]
+            },
+            "description": "",
+            "body": {
+              "mode": "raw",
+              "raw": "{\"userId\": {{autorId}}, \"cantidad\": 999}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "id": "99f6b950-d035-4cdc-a779-2279bc3c34e5",
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Código 409\", function () { pm.response.to.have.status(409); });"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "12 · tracking-service (:8089)",
+      "description": "",
+      "item": [
+        {
+          "name": "Estadísticas del usuario",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{tracking_service_url}}/tracking/users/{{autorId}}",
+              "host": [
+                "{{tracking_service_url}}"
+              ],
+              "path": [
+                "tracking",
+                "users",
+                "{{autorId}}"
+              ]
+            },
+            "description": ""
+          },
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "id": "abb77a02-5c01-4ba0-b6e8-8be9262f1b67",
+                "type": "text/javascript",
+                "exec": [
+                  "// espera a que el mensaje de RabbitMQ se procese",
+                  "const _ini = Date.now(); while (Date.now() - _ini < 1500) {}"
+                ]
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "id": "e1f3a352-c2e2-4d5a-ba9b-be744a811922",
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Código 200\", function () { pm.response.to.have.status(200); });",
+                  "const j = pm.response.json();",
+                  "pm.test(\"Al menos un simulacro\", function () { pm.expect(j.simulacros >= 1).to.be.true; });",
+                  "pm.test(\"Promedio mayor que cero\", function () { pm.expect(j.promedio > 0).to.be.true; });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Resumen general",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{tracking_service_url}}/tracking/summary",
+              "host": [
+                "{{tracking_service_url}}"
+              ],
+              "path": [
+                "tracking",
+                "summary"
+              ]
+            },
+            "description": ""
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "id": "006a5d41-044a-4027-92e1-d33a91066580",
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Código 200\", function () { pm.response.to.have.status(200); });",
+                  "const j = pm.response.json();",
+                  "pm.test(\"Hay simulacros\", function () { pm.expect(j.simulacros >= 1).to.be.true; });"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {
+      "key": "token",
+      "value": ""
+    },
+    {
+      "key": "autorId",
+      "value": ""
+    },
+    {
+      "key": "adminId",
+      "value": ""
+    },
+    {
+      "key": "rev1",
+      "value": ""
+    },
+    {
+      "key": "rev2",
+      "value": ""
+    },
+    {
+      "key": "rev3",
+      "value": ""
+    },
+    {
+      "key": "rev4",
+      "value": ""
+    },
+    {
+      "key": "q1",
+      "value": ""
+    },
+    {
+      "key": "q2",
+      "value": ""
+    },
+    {
+      "key": "q3",
+      "value": ""
+    },
+    {
+      "key": "op1",
+      "value": ""
+    },
+    {
+      "key": "op1b",
+      "value": ""
+    },
+    {
+      "key": "op2",
+      "value": ""
+    },
+    {
+      "key": "op2b",
+      "value": ""
+    },
+    {
+      "key": "op3",
+      "value": ""
+    },
+    {
+      "key": "op4",
+      "value": ""
+    },
+    {
+      "key": "simId",
+      "value": ""
+    },
+    {
+      "key": "simQ",
+      "value": ""
+    }
+  ]
+}
