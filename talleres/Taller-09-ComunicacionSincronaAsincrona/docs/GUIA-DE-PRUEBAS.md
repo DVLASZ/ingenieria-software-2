@@ -8,7 +8,7 @@ Requisitos: Java 21, Maven 3.9 o superior, Docker Desktop encendido (o un Rabbit
 ejecutar Postman por consola, Node.js.
 
 ```bash
-cd lisw2_taller09_microservicios_g8
+cd lisw2_taller09_microservicios_g2
 mvn clean package            # compila los nueve servicios y corre sus 78 pruebas
 ./scripts/levantar.sh        # RabbitMQ con Docker + los nueve servicios (en PowerShell: .\scripts\levantar.ps1)
 ```

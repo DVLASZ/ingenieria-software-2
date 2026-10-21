@@ -158,7 +158,7 @@ tres en cadena.
 ## 4. Estructura del proyecto
 
 ```
-lisw2_taller09_microservicios_g8/
+lisw2_taller09_microservicios_g2/
 ├── README.md
 ├── pom.xml                         compila todos los servicios
 ├── docker-compose.yml              RabbitMQ con consola de administración

@@ -18,7 +18,7 @@ seguir el enunciado.
 | `docker-compose.yml` | RabbitMQ con la consola de administración (5672 y 15672) | Guía |
 | `/postman` | Colección `.json` con variables de entorno, organizada por microservicio, con casos exitosos y fallidos | Ambos |
 | `.gitignore` | Ignora `target/`, `.mvn/`, `.idea/`, `.DS_Store` | Guía |
-| Informe | `lisw2_taller09_g8.docx` en la plantilla `Formato-Documento.docx`, con el enlace al repositorio y capturas de RabbitMQ (`localhost:15672`) | Enunciado |
+| Informe | `lisw2_taller09_g2.docx` en la plantilla `Formato-Documento.docx`, con el enlace al repositorio y capturas de RabbitMQ (`localhost:15672`) | Enunciado |
 | Commits | Incrementales, identificando el microservicio | Guía |
 | Equipo | Pareja (máximo 2): Edward y Laura | Enunciado |
 | Sustentación | La próxima clase; la persona se elige al azar | Enunciado |

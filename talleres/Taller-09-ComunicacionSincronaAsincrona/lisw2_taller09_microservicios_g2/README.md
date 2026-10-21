@@ -1,6 +1,6 @@
 # Taller 09: comunicación síncrona y asíncrona entre microservicios
 
-Grupo 8 (Edward Esteban Dávila Salazar y Laura Isabel Sánchez Fernández). Laboratorio de Ingeniería de
+Grupo 2 (Edward Esteban Dávila Salazar y Laura Isabel Sánchez Fernández). Laboratorio de Ingeniería de
 Software II, Universidad del Cauca.
 
 Nueve microservicios Spring Boot que gestionan el ciclo de vida de una pregunta del Banco de Preguntas Saber PRO.
@@ -38,7 +38,7 @@ Cada servicio tiene además su propio README con sus endpoints, mensajes y varia
 ## Estructura
 
 ```
-lisw2_taller09_microservicios_g8/
+lisw2_taller09_microservicios_g2/
 ├── pom.xml                  compila los nueve servicios de una vez
 ├── docker-compose.yml       RabbitMQ con la consola de administración
 ├── scripts/                 levantar.sh/.ps1 y detener.sh/.ps1

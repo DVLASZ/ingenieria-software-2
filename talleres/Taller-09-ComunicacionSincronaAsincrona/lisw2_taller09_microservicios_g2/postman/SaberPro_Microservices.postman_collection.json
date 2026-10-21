@@ -2,7 +2,7 @@
   "info": {
     "_postman_id": "2a19f424-725f-4e27-8cd0-56ebb11052c1",
     "name": "SaberPro Microservicios · Taller 09",
-    "description": "Colección del Taller 09 (grupo 8). Una carpeta por microservicio; el orden sigue el escenario completo: login, creación y validación, envío a revisión asíncrono, asignación, evaluación, corrección, publicación, notificaciones, historial, simulacros y seguimiento. Ejecutar con Collection Runner (o newman) de arriba abajo, con los nueve servicios y RabbitMQ levantados. Las URLs están en el entorno SaberPro_Local.",
+    "description": "Colección del Taller 09 (grupo 2). Una carpeta por microservicio; el orden sigue el escenario completo: login, creación y validación, envío a revisión asíncrono, asignación, evaluación, corrección, publicación, notificaciones, historial, simulacros y seguimiento. Ejecutar con Collection Runner (o newman) de arriba abajo, con los nueve servicios y RabbitMQ levantados. Las URLs están en el entorno SaberPro_Local.",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
   "item": [

@@ -16,7 +16,7 @@
     <version>0.1.0-SNAPSHOT</version>
     <packaging>pom</packaging>
     <name>lisw2-taller09-microservicios</name>
-    <description>Taller 09: comunicación síncrona y asíncrona entre microservicios (grupo 8). Compila los nueve servicios de una vez.</description>
+    <description>Taller 09: comunicación síncrona y asíncrona entre microservicios (grupo 2). Compila los nueve servicios de una vez.</description>
 
     <properties>
         <java.version>21</java.version>

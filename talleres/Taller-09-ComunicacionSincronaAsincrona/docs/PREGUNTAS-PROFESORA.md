@@ -10,7 +10,7 @@ que confirmar o corregir. Todo se explica en
 
 ---
 
-Buenas tardes, profesora. Somos el grupo 8 (Edward y Laura). Vamos a hacer el taller como una **versión lite
+Buenas tardes, profesora. Somos el grupo 2 (Edward y Laura). Vamos a hacer el taller como una **versión lite
 de nuestro proyecto del banco de preguntas**: los mismos estados, las mismas reglas de revisión y la misma
 forma de rechazar. Usaremos Spring Web, `RabbitTemplate`, `@RabbitListener`, puertos distintos y variables de
 configuración por servicio, tal como lo pidió. Estas son nuestras dudas:

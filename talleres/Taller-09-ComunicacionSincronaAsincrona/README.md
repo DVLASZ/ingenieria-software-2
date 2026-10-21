@@ -1,13 +1,13 @@
 # Taller 09: comunicación síncrona y asíncrona de microservicios
 
 Taller del Laboratorio de Ingeniería de Software II (octubre de 2026), en pareja: Edward Esteban Dávila Salazar
-y Laura Isabel Sánchez Fernández (grupo 8). Se aplica al sistema del Banco de Preguntas Saber PRO.
+y Laura Isabel Sánchez Fernández (grupo 2). Se aplica al sistema del Banco de Preguntas Saber PRO.
 
 | Carpeta o archivo | Contenido |
 |---|---|
-| [`lisw2_taller09_microservicios_g8/`](lisw2_taller09_microservicios_g8/) | Proyecto: nueve microservicios Spring Boot, RabbitMQ y colección de Postman |
+| [`lisw2_taller09_microservicios_g2/`](lisw2_taller09_microservicios_g2/) | Proyecto: nueve microservicios Spring Boot, RabbitMQ y colección de Postman |
 | [`INFORME.md`](INFORME.md) | Informe del taller (texto fuente) |
-| [`lisw2_taller09_g8.docx`](lisw2_taller09_g8.docx) | Informe del taller en Word, con el formato del curso |
+| [`lisw2_taller09_g2.docx`](lisw2_taller09_g2.docx) | Informe del taller en Word, con el formato del curso |
 | [`img/`](img/) | Diagramas y capturas del informe (panel de RabbitMQ, newman, pruebas) |
 | [`docs/TRAZABILIDAD-REQUISITOS.md`](docs/TRAZABILIDAD-REQUISITOS.md) | Cada requisito del enunciado, del Classroom y de la guía, y dónde se cumple |
 | [`docs/API.md`](docs/API.md) | Endpoints de cada servicio y mensajes de RabbitMQ |

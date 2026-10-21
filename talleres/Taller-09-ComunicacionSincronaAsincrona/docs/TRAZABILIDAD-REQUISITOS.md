@@ -2,10 +2,9 @@
 
 Revisión requisito por requisito del **enunciado** (`lisw2_taller09_ComunicacionesSincronasAsincronas.pdf`), del
 **mensaje de la docente en el Classroom** y de la **guía paso a paso** (`lisw2_guia_paso_a_paso_taller09-.pdf`).
-Cada fila dice dónde se cumple y con qué evidencia. Rutas relativas a `lisw2_taller09_microservicios_g8/`.
+Cada fila dice dónde se cumple y con qué evidencia. Rutas relativas a `lisw2_taller09_microservicios_g2/`.
 
-Estados: **Cumple** · **Cumple con diferencia** (hay una decisión justificada en la sección 5) · **Pendiente**
-(entregable que se hace al final: el informe).
+Estados: **Cumple** · **Cumple con diferencia** (hay una decisión justificada en la sección 5) · **Pendiente**.
 
 Evidencia automática: `mvn clean package` corre 78 pruebas unitarias y de integración, y la colección de Postman
 (67 peticiones, 146 verificaciones) pasa completa contra los nueve servicios y RabbitMQ reales.
@@ -95,8 +94,8 @@ Matriz de pruebas del enunciado (carpetas de la colección entre paréntesis):
 | 35 | Trabajo en parejas (máximo 2) | Cumple: Edward y Laura |
 | 36 | Monorepo con una carpeta por microservicio (`user-service`, `question-service`, `validation-service`, `lifecycle-service`, `review-service`, `notification-service`) | Cumple, con tres carpetas más |
 | 37 | Carpeta `/postman` con el `.json` configurado con variables de entorno | Cumple: colección y entorno `SaberPro_Local` |
-| 38 | Informe en la plantilla `Formato-Documento.docx`, con el enlace al repositorio público y capturas de RabbitMQ (`localhost:15672`) | **Pendiente**: qué capturar está en `docs/GUIA-DE-PRUEBAS.md` |
-| 39 | Nomenclatura `lisw2_taller09_gX.docx` | **Pendiente**: `lisw2_taller09_g8.docx` |
+| 38 | Informe en la plantilla `Formato-Documento.docx`, con el enlace al repositorio público y capturas de RabbitMQ (`localhost:15672`) | Cumple: `lisw2_taller09_g2.docx`, con las capturas del panel en el capítulo 6.3 (figuras 13 a 20) y los enlaces en el capítulo 8 |
+| 39 | Nomenclatura `lisw2_taller09_gX.docx` | Cumple: `lisw2_taller09_g2.docx` |
 | 40 | La guía es solo orientadora | Se siguió y, donde choca con el enunciado, manda el enunciado |
 
 ## 3. Guía paso a paso
@@ -104,7 +103,7 @@ Matriz de pruebas del enunciado (carpetas de la colección entre paréntesis):
 | # | Requisito | Dónde y cómo se cumple | Estado |
 |---|---|---|---|
 | 41 | Tabla de microservicios y puertos 8081 a 8086, con su mecanismo de comunicación | Mismos puertos y mecanismos (los tres servicios nuevos usan 8087 a 8089) | Cumple |
-| 42 | Monorepo `lisw2_taller09_microservicios_gX/` con `docker-compose.yml` y `postman/SaberPro_Microservices.postman_collection.json` | Carpeta `lisw2_taller09_microservicios_g8/`; mismo nombre de la colección | Cumple |
+| 42 | Monorepo `lisw2_taller09_microservicios_gX/` con `docker-compose.yml` y `postman/SaberPro_Microservices.postman_collection.json` | Carpeta `lisw2_taller09_microservicios_g2/`; mismo nombre de la colección | Cumple |
 | 43 | Cada servicio autónomo con `config`, `controller`, `dto`, `service` y `messaging` | Mismo esquema, más `model` y `repository` (ver la correspondencia de archivos en 4) | Cumple |
 | 44 | Paso 1: `docker-compose.yml` con `rabbitmq:3-management`, puertos 5672 y 15672, usuario y clave `guest` | `docker-compose.yml` (sin la clave `version`, obsoleta, y con comprobación de salud) | Cumple |
 | 45 | Paso 2: Question llama síncronamente a Validation antes de guardar en DRAFT | `ValidationClient` | Cumple |
@@ -117,7 +116,7 @@ Matriz de pruebas del enunciado (carpetas de la colección entre paréntesis):
 | 52 | Serialización JSON en RabbitMQ | `Jackson2JsonMessageConverter` en cada servicio | Cumple |
 | 53 | `@ExceptionHandler` para devolver 400 ante fallos de validación | `ApiExceptionHandler` (`@RestControllerAdvice`) en cada servicio | Cumple |
 | 54 | `.gitignore` con `target/`, `.mvn/`, `.idea/`, `.DS_Store` | `.gitignore` de la raíz | Cumple |
-| 55 | Commits incrementales identificando el microservicio | Plan en `docs/PLAN-DE-COMMITS.md`; los commits se hacen al subirlo | Pendiente (al subir) |
+| 55 | Commits incrementales identificando el microservicio | Un commit por microservicio en el historial de `main` (plan en `docs/PLAN-DE-COMMITS.md`) | Cumple |
 | 56 | Colección por carpetas (una por microservicio) con variables `{{user_service_url}}` (8081) y `{{question_service_url}}` (8083) | `postman/` | Cumple |
 | 57 | Pruebas de casos exitosos y fallidos: credenciales incorrectas, fallos de validación estructural y transiciones no permitidas | Colección de Postman | Cumple |
 
