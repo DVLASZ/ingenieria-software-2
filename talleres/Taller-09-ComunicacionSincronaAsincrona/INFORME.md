@@ -46,8 +46,8 @@ validarlo, como se acordó con la profesora (los tokens JWT se implementan en el
 
 El capítulo 2 resume los conceptos necesarios. El capítulo 3 presenta el diseño: contextos, estados, mensajes y
 estructura. El capítulo 4 explica la implementación con fragmentos de código. El capítulo 5 muestra cómo se validan
-los estados, los errores y la resiliencia. El capítulo 6 reúne las pruebas y las evidencias de ejecución, y el capítulo
-7 relaciona el trabajo con la rúbrica. El capítulo 8 cierra con las conclusiones y el capítulo 9 con los enlaces.
+los estados, los errores y la resiliencia. El capítulo 6 reúne las pruebas y las evidencias de ejecución. El capítulo 7 cierra con las conclusiones y el capítulo 8 con los
+enlaces.
 
 ## 2. Marco conceptual
 
@@ -105,12 +105,12 @@ ocurrió.
 ### 3.1 Contextos delimitados
 
 El enunciado sugiere seis servicios y deja libertad para ajustarlos o proponer otros. El grupo definió nueve contextos
-(**Tabla 3.1**). Los tres últimos son los que el taller no incluye pero que el proyecto necesita: `history-service`
+(**Tabla 1**). Los tres últimos son los que el taller no incluye pero que el proyecto necesita: `history-service`
 consume todos los eventos y guarda la línea de tiempo de cada pregunta (es el ejemplo de un servicio que solo
 reacciona a mensajes), `simulation-service` mantiene su propio catálogo con las preguntas publicadas y
 `tracking-service` calcula estadísticas con los resultados de los simulacros.
 
-**Tabla 3.1.** Microservicios del taller y su contexto delimitado.
+**Tabla 1.** Microservicios del taller y su contexto delimitado.
 
 | Servicio | Puerto | Contexto delimitado | Origen |
 |---|---|---|---|
@@ -124,24 +124,24 @@ reacciona a mensajes), `simulation-service` mantiene su propio catálogo con las
 | `simulation-service` | 8088 | Simulacros de evaluación | Propuesto |
 | `tracking-service` | 8089 | Seguimiento académico | Propuesto |
 
-La **Figura 3.1** muestra cómo se comunican: las líneas continuas son llamadas REST y las punteadas son mensajes de
+La **Figura 1** muestra cómo se comunican: las líneas continuas son llamadas REST y las punteadas son mensajes de
 RabbitMQ.
 
 ![Diagrama de contextos delimitados y de la comunicación entre servicios.](img/fig-contextos.png)
 
-**Figura 3.1.** Diagrama de contextos delimitados y de la comunicación entre servicios.
+**Figura 1.** Diagrama de contextos delimitados y de la comunicación entre servicios.
 
 ### 3.2 Ciclo de vida de la pregunta
 
 `lifecycle-service` es la autoridad sobre el estado: los demás servicios le piden transiciones o reaccionan a los
 eventos que publica, pero ninguno actualiza el estado por su cuenta. Los estados y transiciones son los del proyecto
-(**Figura 3.2**); la API devuelve el nombre del proyecto y su equivalente en el enunciado (**Tabla 3.2**).
+(**Figura 2**); la API devuelve el nombre del proyecto y su equivalente en el enunciado (**Tabla 2**).
 
 ![Diagrama de estados del ciclo de vida de una pregunta.](img/fig-estados.png)
 
-**Figura 3.2.** Diagrama de estados del ciclo de vida de una pregunta.
+**Figura 2.** Diagrama de estados del ciclo de vida de una pregunta.
 
-**Tabla 3.2.** Estados del proyecto y su nombre en el enunciado del taller.
+**Tabla 2.** Estados del proyecto y su nombre en el enunciado del taller.
 
 | Estado del proyecto | Nombre en el enunciado |
 |---|---|
@@ -167,9 +167,9 @@ Las reglas de revisión son las del proyecto:
 
 Se usan dos exchanges durables: `saberpro.direct.exchange` (*direct*) para los comandos y `saberpro.topic.exchange`
 (*topic*) para los eventos, de modo que varios servicios puedan recibir el mismo evento. Todos los mensajes viajan en
-JSON. La **Tabla 3.3** lista cada mensaje, quién lo publica, con qué routing key y qué colas lo reciben.
+JSON. La **Tabla 3** lista cada mensaje, quién lo publica, con qué routing key y qué colas lo reciben.
 
-**Tabla 3.3.** Mensajes del sistema, colas y consumidores.
+**Tabla 3.** Mensajes del sistema, colas y consumidores.
 
 | Mensaje | Publica | Routing key | Cola | Consume |
 |---|---|---|---|---|
@@ -195,10 +195,10 @@ Todos los mensajes llevan el mismo sobre (*envelope*) con cuatro campos: `eventI
 
 ### 3.4 Estructura del proyecto
 
-El proyecto es un monorepo con una carpeta por servicio (**Tabla 3.4**). Cada servicio es un proyecto Spring Boot
-autónomo con el mismo esquema de paquetes, el de la guía del taller (**Tabla 3.5**).
+El proyecto es un monorepo con una carpeta por servicio (**Tabla 4**). Cada servicio es un proyecto Spring Boot
+autónomo con el mismo esquema de paquetes, el de la guía del taller (**Tabla 5**).
 
-**Tabla 3.4.** Contenido de la carpeta `lisw2_taller09_microservicios_g8`.
+**Tabla 4.** Contenido de la carpeta `lisw2_taller09_microservicios_g2`.
 
 | Elemento | Contenido |
 |---|---|
@@ -208,7 +208,7 @@ autónomo con el mismo esquema de paquetes, el de la guía del taller (**Tabla 3
 | `postman/` | Colección de pruebas y entorno local |
 | `user-service/` a `tracking-service/` | Un proyecto Spring Boot por servicio |
 
-**Tabla 3.5.** Paquetes de cada servicio.
+**Tabla 5.** Paquetes de cada servicio.
 
 | Paquete | Responsabilidad |
 |---|---|
@@ -223,9 +223,9 @@ autónomo con el mismo esquema de paquetes, el de la guía del taller (**Tabla 3
 ### 3.5 Configuración por servicio
 
 Cada servicio tiene su puerto y sus variables de configuración en su `application.yml`, con valores por defecto
-para ejecutar en local y sustituibles por variables de entorno (**Tabla 3.6**).
+para ejecutar en local y sustituibles por variables de entorno (**Tabla 6**).
 
-**Tabla 3.6.** Variables de configuración de cada servicio.
+**Tabla 6.** Variables de configuración de cada servicio.
 
 | Variable | Valor por defecto | Uso |
 |---|---|---|
@@ -237,21 +237,21 @@ para ejecutar en local y sustituibles por variables de entorno (**Tabla 3.6**).
 
 ### 3.6 Flujo del escenario
 
-La **Figura 3.3** recorre el escenario completo del taller: el autor inicia sesión, crea una pregunta (REST), la envía a
+La **Figura 3** recorre el escenario completo del taller: el autor inicia sesión, crea una pregunta (REST), la envía a
 revisión (comando asíncrono con respuesta 202), `lifecycle-service` procesa la transición, el administrador asigna un
 revisor y el `ReviewerAssigned` llega a `notification-service` sin bloquear la asignación.
 
 ![Diagrama de secuencia del escenario de creación, envío a revisión, asignación y notificación.](img/fig-secuencia.png)
 
-**Figura 3.3.** Diagrama de secuencia del escenario de creación, envío a revisión, asignación y notificación.
+**Figura 3.** Diagrama de secuencia del escenario de creación, envío a revisión, asignación y notificación.
 
 ## 4. Implementación
 
 Todos los servicios usan las piezas que pidió la profesora, escritas como en los ejemplos de teoría: Spring Web para
 los endpoints REST, `RabbitTemplate.convertAndSend` para publicar, `@RabbitListener` para consumir, puertos distintos
-y variables de configuración por servicio (**Tabla 4.1**).
+y variables de configuración por servicio (**Tabla 7**).
 
-**Tabla 4.1.** Piezas de Spring que usa cada servicio.
+**Tabla 7.** Piezas de Spring que usa cada servicio.
 
 | Servicio | Spring Web | `RabbitTemplate` publica | `@RabbitListener` consume |
 |---|---|---|---|
@@ -281,7 +281,7 @@ login sigue funcionando: la autenticación nunca depende de la mensajería.
 el usuario tiene el rol AUTOR, pide a `validation-service` que valide la pregunta y, si es válida, la guarda en
 `BORRADOR`, crea su estado en `lifecycle-service` y responde 201. Si la validación falla responde 400 con la lista
 de errores y la pregunta no se registra. Si crear el estado en `lifecycle-service` falla, la pregunta recién guardada
-se elimina para no dejar un registro huérfano (**Figura 4.1**).
+se elimina para no dejar un registro huérfano (**Figura 4**).
 
 ```java
 public Question crear(PreguntaRequest req) {
@@ -301,14 +301,14 @@ public Question crear(PreguntaRequest req) {
 }
 ```
 
-**Figura 4.1.** Método `crear` de `QuestionService`: creación síncrona con llamadas REST a tres servicios.
+**Figura 4.** Método `crear` de `QuestionService`: creación síncrona con llamadas REST a tres servicios.
 
 #### 4.1.3 Llamadas REST entre servicios
 
-La **Tabla 4.2** resume las llamadas síncronas entre servicios. En todas, el servicio que llama traduce los fallos del
+La **Tabla 8** resume las llamadas síncronas entre servicios. En todas, el servicio que llama traduce los fallos del
 servicio llamado a errores HTTP propios (400, 403, 404, 409 o 503) en lugar de dejar pasar una excepción.
 
-**Tabla 4.2.** Llamadas REST entre servicios.
+**Tabla 8.** Llamadas REST entre servicios.
 
 | Origen | Destino | Para qué |
 |---|---|---|
@@ -323,7 +323,7 @@ servicio llamado a errores HTTP propios (400, 403, 404, 409 o 503) en lugar de d
 #### 4.2.1 Publicación del comando y respuesta 202
 
 Cuando el docente pide enviar una pregunta a revisión, `question-service` registra una operación con un identificador
-único y publica el comando `SubmitQuestionForReview` en el exchange *direct* (**Figura 4.2**). Responde
+único y publica el comando `SubmitQuestionForReview` en el exchange *direct* (**Figura 5**). Responde
 **202 Accepted** con el `operationId`: la respuesta confirma que la solicitud fue aceptada, pero no que la
 transición haya terminado. Si no se puede publicar porque RabbitMQ no está disponible, la operación se marca `FAILED`
 y la respuesta es 503: no se acepta una solicitud que no se pudo encolar.
@@ -351,11 +351,11 @@ public Operation solicitar(Long questionId, Comando comando, String solicitadoPo
 }
 ```
 
-**Figura 4.2.** Publicación del comando con `RabbitTemplate` y manejo de RabbitMQ caído en `question-service`.
+**Figura 5.** Publicación del comando con `RabbitTemplate` y manejo de RabbitMQ caído en `question-service`.
 
 #### 4.2.2 Procesamiento en lifecycle-service y resultado consultable
 
-`lifecycle-service` consume el comando con `@RabbitListener` (**Figura 4.3**), verifica que la transición
+`lifecycle-service` consume el comando con `@RabbitListener` (**Figura 6**), verifica que la transición
 `BORRADOR → PENDIENTE_REVISION` sea válida y registra el nuevo estado. Siempre guarda el resultado de la operación
 (`COMPLETED` o `FAILED` con el motivo) y lo publica como evento `OperationResult`; `question-service` lo recibe y lo
 deja disponible en `GET /operations/{operationId}`, que es lo que el cliente consulta. Un comando repetido se
@@ -386,7 +386,7 @@ public void procesarComando(EventEnvelope comando) {
 }
 ```
 
-**Figura 4.3.** Consumo del comando y registro del resultado en `lifecycle-service`.
+**Figura 6.** Consumo del comando y registro del resultado en `lifecycle-service`.
 
 #### 4.2.3 Asignación de revisor y consistencia
 
@@ -394,7 +394,7 @@ El administrador pide `POST /reviews/assign`. `review-service` valida las reglas
 autor no puede revisar, el usuario debe ser administrador y los revisores deben ser elegibles) y consulta a
 `lifecycle-service` que la pregunta esté en `PENDIENTE_REVISION`. Después guarda la asignación y pide por REST la
 transición a `EN_REVISION`. Todo el método es transaccional: si `lifecycle-service` rechaza la transición, la excepción
-revierte la asignación y no queda ninguna asignación sin su cambio de estado (**Figura 4.4**). Solo cuando la
+revierte la asignación y no queda ninguna asignación sin su cambio de estado (**Figura 7**). Solo cuando la
 transición tiene éxito se publica el evento.
 
 ```java
@@ -414,7 +414,7 @@ public CasoDeRevision asignar(Long questionId, List<Long> revisores, Long admini
 }
 ```
 
-**Figura 4.4.** Método `asignar` de `ReviewService`: la asignación se revierte si la transición falla.
+**Figura 7.** Método `asignar` de `ReviewService`: la asignación se revierte si la transición falla.
 
 #### 4.2.4 Evento ReviewerAssigned y notificación
 
@@ -442,10 +442,10 @@ de mensajes fallidos y el patrón Outbox.
 
 ### 5.1 Matriz de casos de prueba
 
-La **Tabla 5.1** reúne los diez casos del enunciado con el resultado que obtuvo el sistema en la ejecución de este
+La **Tabla 9** reúne los diez casos del enunciado con el resultado que obtuvo el sistema en la ejecución de este
 informe y la prueba que lo comprueba en la colección de Postman.
 
-**Tabla 5.1.** Casos de prueba del enunciado y resultado obtenido.
+**Tabla 9.** Casos de prueba del enunciado y resultado obtenido.
 
 | Caso | Resultado esperado | Resultado obtenido |
 |---|---|---|
@@ -462,7 +462,7 @@ informe y la prueba que lo comprueba en la colección de Postman.
 
 ### 5.2 Operaciones asíncronas
 
-La **Figura 5.1** muestra la ejecución real del envío a revisión. La primera solicitud se acepta (202) y, al consultar la
+La **Figura 8** muestra la ejecución real del envío a revisión. La primera solicitud se acepta (202) y, al consultar la
 operación, está `COMPLETED`; `lifecycle-service` confirma el estado `PENDIENTE_REVISION`. Un segundo envío de la misma
 pregunta también recibe 202, porque la solicitud se acepta antes de saber si la transición será válida, pero su
 resultado queda `FAILED` con el motivo: el cliente puede verificar que la transición no se completó.
@@ -484,11 +484,11 @@ GET  /operations/2c89c944-b5d2-4d1d-9fa3-b34bdec958c0       -> 200
    "mensaje": "La pregunta 7 ya está en Pendiente de revisión"}
 ```
 
-**Figura 5.1.** Envío a revisión: una operación `COMPLETED` y otra `FAILED`, consultadas después.
+**Figura 8.** Envío a revisión: una operación `COMPLETED` y otra `FAILED`, consultadas después.
 
 ### 5.3 Asignación, rechazo y corrección
 
-La **Figura 5.2** muestra el recorrido de una pregunta por la revisión. El intento de asignar al propio autor se
+La **Figura 9** muestra el recorrido de una pregunta por la revisión. El intento de asignar al propio autor se
 rechaza con 400. La asignación de un revisor elegible responde 201, `lifecycle-service` deja la pregunta en
 `EN_REVISION` y `notification-service` genera el aviso al revisor. Rechazar sin observación responde 400; rechazar con
 observación cierra la ronda (`REJECTED`) y deja la pregunta `RECHAZADA`. Al corregirla, el autor la devuelve a
@@ -517,13 +517,13 @@ POST /lifecycle/12/transition {"to": "APROBADA"} (pregunta en BORRADOR)         
   {"message": "Transición no permitida: Borrador → Aprobada"}
 ```
 
-**Figura 5.2.** Asignación de un revisor, notificación, rechazo, corrección y transición inválida.
+**Figura 9.** Asignación de un revisor, notificación, rechazo, corrección y transición inválida.
 
 ### 5.4 Caída de RabbitMQ
 
 Con RabbitMQ detenido, el login sigue respondiendo 200 porque no depende de la mensajería, y el envío a revisión
 responde 503 con un mensaje claro en lugar de aceptar una solicitud que no se pudo encolar. Al reiniciar RabbitMQ, los
-nueve consumidores se reconectan solos y el mismo envío se acepta y se completa (**Figura 5.3**).
+nueve consumidores se reconectan solos y el mismo envío se acepta y se completa (**Figura 10**).
 
 ```
 (docker stop saberpro-rabbitmq)
@@ -534,14 +534,14 @@ POST /questions/8/submit            -> 202   {"operationId": "90512f6a-5879-413c
 GET  /operations/90512f6a-5879-413c-8ee7-da38984b26fc  -> 200   {"status": "COMPLETED"}
 ```
 
-**Figura 5.3.** Comportamiento del sistema con RabbitMQ detenido y tras reiniciarlo.
+**Figura 10.** Comportamiento del sistema con RabbitMQ detenido y tras reiniciarlo.
 
 ### 5.5 Consumidores detenidos
 
 Se detuvo `notification-service` y se ejecutó la colección completa. Las peticiones que no dependen de ese servicio
-pasaron sin problema; los mensajes dirigidos a él quedaron esperando en sus colas (**Figura 6.9**): 10 mensajes en
+pasaron sin problema; los mensajes dirigidos a él quedaron esperando en sus colas (**Figura 19**): 10 mensajes en
 `notification.events` y 4 en `notification.reviewer-assigned`. Al volver a levantarlo, los consumió y las colas
-quedaron en cero (**Figura 6.10**). Así se comprueba el desacoplamiento temporal: el servicio de notificaciones puede
+quedaron en cero (**Figura 20**). Así se comprueba el desacoplamiento temporal: el servicio de notificaciones puede
 estar caído sin afectar la operación principal.
 
 ## 6. Pruebas y evidencias de ejecución
@@ -550,9 +550,9 @@ estar caído sin afectar la operación principal.
 
 `mvn clean package` compila los nueve servicios y ejecuta 78 pruebas unitarias y de integración que no necesitan
 RabbitMQ: los mensajes se verifican con un `RabbitTemplate` simulado y los listeners se invocan directamente
-(**Tabla 6.1** y **Figura 6.1**).
+(**Tabla 10** y **Figura 11**).
 
-**Tabla 6.1.** Pruebas automáticas por servicio.
+**Tabla 10.** Pruebas automáticas por servicio.
 
 | Servicio | Pruebas | Qué verifican |
 |---|---|---|
@@ -569,16 +569,16 @@ RabbitMQ: los mensajes se verifican con un `RabbitTemplate` simulado y los liste
 
 ![Resultado de la compilación y de las pruebas automáticas.](img/consola-maven.jpg)
 
-**Figura 6.1.** Resultado de `mvn clean package`: 78 pruebas en verde y los nueve módulos compilados.
+**Figura 11.** Resultado de `mvn clean package`: 78 pruebas en verde y los nueve módulos compilados.
 
 ### 6.2 Colección de Postman
 
 La colección `SaberPro_Microservices.postman_collection.json` está organizada por microservicio, como pide el
-enunciado, en doce carpetas (**Tabla 6.2**). Se ejecuta completa con el *Collection Runner* de Postman o por consola con
+enunciado, en doce carpetas (**Tabla 11**). Se ejecuta completa con el *Collection Runner* de Postman o por consola con
 `newman`, y se puede repetir sin reiniciar nada. El resultado es de **67 peticiones y 146 verificaciones, todas en
-verde** (**Figura 6.2**).
+verde** (**Figura 12**).
 
-**Tabla 6.2.** Carpetas de la colección de Postman.
+**Tabla 11.** Carpetas de la colección de Postman.
 
 | Carpeta | Qué recorre |
 |---|---|
@@ -597,65 +597,65 @@ verde** (**Figura 6.2**).
 
 ![Resultado de la ejecución de la colección de Postman con newman.](img/consola-newman.jpg)
 
-**Figura 6.2.** Resultado de la colección de Postman con `newman`: 67 peticiones y 146 verificaciones, sin fallos.
+**Figura 12.** Resultado de la colección de Postman con `newman`: 67 peticiones y 146 verificaciones, sin fallos.
 
 ### 6.3 Evidencias del panel de RabbitMQ
 
 Las capturas siguientes se tomaron en la consola de administración de RabbitMQ (`http://localhost:15672`) después de
-ejecutar la colección (**Tabla 6.3**).
+ejecutar la colección (**Tabla 12**).
 
-**Tabla 6.3.** Capturas del panel de RabbitMQ y lo que muestran.
+**Tabla 12.** Capturas del panel de RabbitMQ y lo que muestran.
 
 | Figura | Pestaña | Qué muestra |
 |---|---|---|
-| 6.3 | *Overview* | Gráfica de mensajes y 9 conexiones, 15 canales, 9 colas y 9 consumidores |
-| 6.4 | *Exchanges* | `saberpro.direct.exchange` (direct) y `saberpro.topic.exchange` (topic) |
-| 6.5 | *Exchanges* → topic | Colas y routing keys enlazadas al exchange de eventos |
-| 6.6 | *Queues* | Las nueve colas, con 0 mensajes pendientes |
-| 6.7 | *Queues* → `lifecycle.commands` | Un consumidor conectado y capacidad del 100 % |
-| 6.8 | *Connections* | Una conexión AMQP por servicio |
-| 6.9 | *Queues* | Mensajes acumulados con `notification-service` detenido |
-| 6.10 | *Queues* | Colas en cero tras volver a levantar el servicio |
+| 13 | *Overview* | Gráfica de mensajes y 9 conexiones, 15 canales, 9 colas y 9 consumidores |
+| 14 | *Exchanges* | `saberpro.direct.exchange` (direct) y `saberpro.topic.exchange` (topic) |
+| 15 | *Exchanges* → topic | Colas y routing keys enlazadas al exchange de eventos |
+| 16 | *Queues* | Las nueve colas, con 0 mensajes pendientes |
+| 17 | *Queues* → `lifecycle.commands` | Un consumidor conectado y capacidad del 100 % |
+| 18 | *Connections* | Una conexión AMQP por servicio |
+| 19 | *Queues* | Mensajes acumulados con `notification-service` detenido |
+| 20 | *Queues* | Colas en cero tras volver a levantar el servicio |
 
 ![Resumen del panel de RabbitMQ.](img/rabbit-resumen.jpg)
 
-**Figura 6.3.** Resumen del panel de RabbitMQ: mensajes publicados y entregados, y los totales de conexiones y colas.
+**Figura 13.** Resumen del panel de RabbitMQ: mensajes publicados y entregados, y los totales de conexiones y colas.
 
 ![Exchanges de RabbitMQ.](img/rabbit-exchanges.jpg)
 
-**Figura 6.4.** Exchanges de RabbitMQ: el *direct* de los comandos y el *topic* de los eventos.
+**Figura 14.** Exchanges de RabbitMQ: el *direct* de los comandos y el *topic* de los eventos.
 
 ![Bindings del exchange topic.](img/rabbit-bindings.jpg)
 
-**Figura 6.5.** Bindings del exchange `saberpro.topic.exchange`: colas y routing keys.
+**Figura 15.** Bindings del exchange `saberpro.topic.exchange`: colas y routing keys.
 
 ![Colas de RabbitMQ.](img/rabbit-colas.jpg)
 
-**Figura 6.6.** Colas de RabbitMQ después de ejecutar la colección: todas sin mensajes pendientes.
+**Figura 16.** Colas de RabbitMQ después de ejecutar la colección: todas sin mensajes pendientes.
 
 ![Detalle de la cola lifecycle.commands.](img/rabbit-cola-lifecycle.jpg)
 
-**Figura 6.7.** Detalle de la cola `lifecycle.commands`: un consumidor conectado.
+**Figura 17.** Detalle de la cola `lifecycle.commands`: un consumidor conectado.
 
 ![Conexiones de RabbitMQ.](img/rabbit-conexiones.jpg)
 
-**Figura 6.8.** Conexiones de RabbitMQ: una por cada servicio que publica o consume.
+**Figura 18.** Conexiones de RabbitMQ: una por cada servicio que publica o consume.
 
 ![Colas con mensajes acumulados.](img/rabbit-colas-acumuladas.jpg)
 
-**Figura 6.9.** Colas con `notification-service` detenido: 10 mensajes en `notification.events` y 4 en
+**Figura 19.** Colas con `notification-service` detenido: 10 mensajes en `notification.events` y 4 en
 `notification.reviewer-assigned`.
 
 ![Colas tras reiniciar el servicio.](img/rabbit-colas-vaciadas.jpg)
 
-**Figura 6.10.** Colas tras reiniciar `notification-service`: los mensajes se consumieron y las colas quedaron en cero.
+**Figura 20.** Colas tras reiniciar `notification-service`: los mensajes se consumieron y las colas quedaron en cero.
 
 ### 6.4 Cómo reproducir las pruebas
 
 Requisitos: Java 21, Maven 3.9 o superior, Docker Desktop encendido y Node.js (para `newman`).
 
 ```
-cd lisw2_taller09_microservicios_g8
+cd lisw2_taller09_microservicios_g2
 mvn clean package            # compila y corre las 78 pruebas
 ./scripts/levantar.sh        # RabbitMQ con Docker y los nueve servicios (en PowerShell: .\scripts\levantar.ps1)
 npx newman run postman/SaberPro_Microservices.postman_collection.json -e postman/SaberPro_Local.postman_environment.json
@@ -665,24 +665,9 @@ npx newman run postman/SaberPro_Microservices.postman_collection.json -e postman
 Los usuarios de prueba son `admin`, `autor1`, `autor2` y `revisor1` a `revisor4`, todos con la clave `clave123`. Las
 bases son H2 en memoria: al reiniciar un servicio sus datos se pierden.
 
-## 7. Cumplimiento de la rúbrica
+## 7. Conclusiones
 
-La **Tabla 7.1** relaciona cada criterio de la rúbrica con lo que se entrega y dónde se evidencia.
-
-**Tabla 7.1.** Cumplimiento de la rúbrica del taller.
-
-| Criterio | Peso | Qué se entrega | Evidencia |
-|---|---|---|---|
-| Diseño de microservicios y delimitación de responsabilidades | 15 % | Nueve contextos con una responsabilidad cada uno; `lifecycle-service` como único dueño del estado | Secciones 3.1 y 3.2; Figura 3.1 |
-| Comunicación síncrona REST | 20 % | Login, creación, validación y llamadas entre servicios con Spring Web | Secciones 4.1 y 5.1 |
-| Comunicación asíncrona con RabbitMQ | 25 % | Comandos y eventos con `RabbitTemplate` y `@RabbitListener`, dos exchanges y nueve colas | Secciones 3.3 y 4.2; Figuras 6.3 a 6.8 |
-| Validación de estados, errores y resiliencia | 15 % | Transiciones inválidas, operaciones `FAILED`, reversión de la asignación, RabbitMQ caído y consumidores detenidos | Capítulo 5; Figuras 5.1 a 5.3, 6.9 y 6.10 |
-| Pruebas en Postman y evidencias de ejecución | 15 % | Colección por microservicio, 67 peticiones y 146 verificaciones; 78 pruebas automáticas | Capítulo 6; Figuras 6.1 y 6.2 |
-| Documentación técnica y sustentación | 10 % | Este informe, el README y la carpeta `docs/` del taller | Capítulo 9 |
-
-## 8. Conclusiones
-
-### 8.1 Lo aprendido
+### 7.1 Lo aprendido
 
 - **Acoplamiento.** Las llamadas REST encadenadas hacen que la creación de una pregunta dependa de tres servicios a
   la vez; en cambio, el envío a revisión, la transición y la notificación quedaron desacoplados por la mensajería y
@@ -696,7 +681,7 @@ La **Tabla 7.1** relaciona cada criterio de la rúbrica con lo que se entrega y 
 - **Escalabilidad.** Cada servicio escala por separado y los consumidores de una misma cola se reparten los mensajes;
   la idempotencia hace seguro tener varias réplicas o reintentos.
 
-### 8.2 Limitaciones
+### 7.2 Limitaciones
 
 - Las bases son H2 en memoria: al reiniciar un servicio se pierden sus datos. El proyecto usa PostgreSQL por servicio.
 - El token es un valor simple que no se valida; la autenticación real con JWT es del tercer corte.
@@ -704,21 +689,21 @@ La **Tabla 7.1** relaciona cada criterio de la rúbrica con lo que se entrega y 
   entre guardar y publicar se podría perder un evento.
 - El correo es simulado.
 
-### 8.3 Evolución hacia el proyecto
+### 7.3 Evolución hacia el proyecto
 
 El proyecto del curso (`banco-preguntas-saberpro`) ya incorpora lo que el taller deja afuera: PostgreSQL por servicio,
 Keycloak con JWT, Eureka, API Gateway, Outbox transaccional, cola de mensajes fallidos, correo real, Swagger
 agregado y pruebas de carga con k6. El taller es la base conceptual de esa evolución.
 
-## 9. Enlaces
+## 8. Enlaces
 
-**Tabla 9.1.** Enlaces del trabajo.
+**Tabla 13.** Enlaces del trabajo.
 
 | Recurso | Enlace |
 |---|---|
 | Repositorio del laboratorio | https://github.com/DVLASZ/ingenieria-software-2 |
 | Carpeta del Taller 9 | https://github.com/DVLASZ/ingenieria-software-2/tree/main/talleres/Taller-09-ComunicacionSincronaAsincrona |
-| Proyecto `lisw2_taller09_microservicios_g8` | https://github.com/DVLASZ/ingenieria-software-2/tree/main/talleres/Taller-09-ComunicacionSincronaAsincrona/lisw2_taller09_microservicios_g8 |
-| Colección de Postman | https://github.com/DVLASZ/ingenieria-software-2/tree/main/talleres/Taller-09-ComunicacionSincronaAsincrona/lisw2_taller09_microservicios_g8/postman |
+| Proyecto `lisw2_taller09_microservicios_g2` | https://github.com/DVLASZ/ingenieria-software-2/tree/main/talleres/Taller-09-ComunicacionSincronaAsincrona/lisw2_taller09_microservicios_g2 |
+| Colección de Postman | https://github.com/DVLASZ/ingenieria-software-2/tree/main/talleres/Taller-09-ComunicacionSincronaAsincrona/lisw2_taller09_microservicios_g2/postman |
 | Documentación del taller | https://github.com/DVLASZ/ingenieria-software-2/tree/main/talleres/Taller-09-ComunicacionSincronaAsincrona/docs |
 | Repositorio del proyecto de curso | https://github.com/DVLASZ/banco-preguntas-saberpro |
