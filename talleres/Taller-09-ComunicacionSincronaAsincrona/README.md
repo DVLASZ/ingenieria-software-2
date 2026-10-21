@@ -5,7 +5,10 @@ y Laura Isabel Sánchez Fernández (grupo 8). Se aplica al sistema del Banco de 
 
 | Carpeta o archivo | Contenido |
 |---|---|
-| [`lisw2_taller09_microservicios_g8/`](lisw2_taller09_microservicios_g8/) | Proyecto: seis microservicios Spring Boot, RabbitMQ y colección de Postman |
+| [`lisw2_taller09_microservicios_g8/`](lisw2_taller09_microservicios_g8/) | Proyecto: nueve microservicios Spring Boot, RabbitMQ y colección de Postman |
+| [`INFORME.md`](INFORME.md) | Informe del taller (texto fuente) |
+| [`lisw2_taller09_g8.docx`](lisw2_taller09_g8.docx) | Informe del taller en Word, con el formato del curso |
+| [`img/`](img/) | Diagramas y capturas del informe (panel de RabbitMQ, newman, pruebas) |
 | [`docs/TRAZABILIDAD-REQUISITOS.md`](docs/TRAZABILIDAD-REQUISITOS.md) | Cada requisito del enunciado, del Classroom y de la guía, y dónde se cumple |
 | [`docs/API.md`](docs/API.md) | Endpoints de cada servicio y mensajes de RabbitMQ |
 | [`docs/GUIA-DE-PRUEBAS.md`](docs/GUIA-DE-PRUEBAS.md) | Cómo ejecutar y comprobar todo, y qué capturar para el informe |
@@ -16,7 +19,7 @@ y Laura Isabel Sánchez Fernández (grupo 8). Se aplica al sistema del Banco de 
 
 ## Estado
 
-Desarrollo terminado (a la espera del informe): los nueve servicios, la colección de Postman y los scripts para
+Desarrollo terminado e informe redactado: los nueve servicios, la colección de Postman y los scripts para
 levantarlo todo. Las 78 pruebas unitarias y de integración pasan, y la colección de Postman (67 peticiones, 146
 verificaciones) pasa completa contra los nueve servicios con RabbitMQ real. Se comprobó además que, si RabbitMQ se
 cae, el login sigue respondiendo y el envío a revisión informa el error (503), que los consumidores se reconectan solos,
