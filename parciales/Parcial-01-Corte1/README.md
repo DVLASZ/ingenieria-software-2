@@ -8,6 +8,7 @@ Parcial práctico del laboratorio de Ingeniería de Software II. La docente lo c
   unitarias con JUnit.
 - `ParcialCorteIGrupoB.pdf`: enunciado del parcial (grupo B).
 - `lisw2_parcial01_davilaE.docx`: documento con los capítulos del proceso de resolución.
+- `INFORME.md` y `img/`: el mismo documento en Markdown, con sus capturas.
 
 ```bash
 cd lisw2_parcial01_davilaE

@@ -7,13 +7,13 @@ Talleres del laboratorio de Ingeniería de Software II. Cada carpeta es un traba
 |---|---|---|---|
 | [Taller 1](Taller-01-Polimorfismo) | Polimorfismo: jerarquía `Figure`, `Circle`, `Square` y `Triangle` | En esta carpeta | |
 | [Taller 2](Taller-02-SOLID) | Aplicación de escritorio (Swing y SQLite) para la gestión de usuarios, aplicando los cinco principios SOLID | En esta carpeta | [`INFORME.md`](Taller-02-SOLID/INFORME.md) |
-| [Taller 3](Taller-03-C4) | Modelo de arquitectura C4 (contexto, contenedores, componentes y clases) del proyecto de curso | Diagramas en esta carpeta | [`INFORME.md`](Taller-03-C4/INFORME.md) |
+| [Taller 3](Taller-03-C4) | Modelo de arquitectura C4 (contexto, contenedores, componentes y clases) del proyecto de curso | Diagramas en esta carpeta | [`INFORME.md`](Taller-03-C4/INFORME.md) y [`.docx`](Taller-03-C4/lisw2_t3_g2.docx) |
 | [Taller 4](Taller-04-CapasMVC) | Arquitectura en capas, MVC y Observer sobre el banco de preguntas, con el login y los roles del Taller 2 | En esta carpeta, congelado tal como se calificó | |
-| [Taller 5](Taller-05-MicrokernelPipesFilters) | Microkernel y Tuberías y Filtros: generación de preguntas por plugins | En el proyecto, etiqueta [`taller-5`](https://github.com/DVLASZ/banco-preguntas-saberpro/tree/taller-5/modulo-microkernel) | |
-| [Taller 6](Taller-06-ApiRestSpringBoot) | API REST con Spring Boot y JPA: CRUD de preguntas | En el proyecto, etiqueta [`taller-6`](https://github.com/DVLASZ/banco-preguntas-saberpro/tree/taller-6/modulo-api-rest) | |
-| Taller 7 | Lo cuenta la docente como el [Parcial 1](../parciales/Parcial-01-Corte1) | En `parciales/` | |
+| [Taller 5](Taller-05-MicrokernelPipesFilters) | Microkernel y Tuberías y Filtros: generación de preguntas por plugins | En el proyecto, etiqueta [`taller-5`](https://github.com/DVLASZ/banco-preguntas-saberpro/tree/taller-5/modulo-microkernel) | [`INFORME.md`](Taller-05-MicrokernelPipesFilters/INFORME.md) y [`.docx`](Taller-05-MicrokernelPipesFilters/lisw2_t5_g2.docx) |
+| [Taller 6](Taller-06-ApiRestSpringBoot) | API REST con Spring Boot y JPA: CRUD de preguntas | En el proyecto, etiqueta [`taller-6`](https://github.com/DVLASZ/banco-preguntas-saberpro/tree/taller-6/modulo-api-rest) | [`INFORME.md`](Taller-06-ApiRestSpringBoot/INFORME.md) y [`.docx`](Taller-06-ApiRestSpringBoot/lisw2_t6_g2.docx) |
+| Taller 7 | Lo cuenta la docente como el [Parcial 1](../parciales/Parcial-01-Corte1) | En `parciales/` | [`INFORME.md`](../parciales/Parcial-01-Corte1/INFORME.md) y [`.docx`](../parciales/Parcial-01-Corte1/lisw2_parcial01_davilaE.docx) |
 | [Taller 8](Taller-08-PatronesDiseno) | Patrones de diseño: Builder, Adapter, Facade, State, Template Method y Decorator sobre un modelo propio de pregunta | En esta carpeta | [`INFORME.md`](Taller-08-PatronesDiseno/INFORME.md) y [`.docx`](Taller-08-PatronesDiseno/lisw2_t8_g2.docx) |
-| [Taller 9](Taller-09-ComunicacionSincronaAsincrona) | Comunicación síncrona (REST) y asíncrona (RabbitMQ) entre nueve microservicios Spring Boot, versión reducida del proyecto | En esta carpeta | |
+| [Taller 9](Taller-09-ComunicacionSincronaAsincrona) | Comunicación síncrona (REST) y asíncrona (RabbitMQ) entre nueve microservicios Spring Boot, versión reducida del proyecto | En esta carpeta | [`INFORME.md`](Taller-09-ComunicacionSincronaAsincrona/INFORME.md) y [`.docx`](Taller-09-ComunicacionSincronaAsincrona/lisw2_taller09_g2.docx) |
 
 ## Criterio para ubicar el código
 
