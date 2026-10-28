@@ -14,6 +14,7 @@ Talleres del laboratorio de Ingeniería de Software II. Cada carpeta es un traba
 | Taller 7 | Lo cuenta la docente como el [Parcial 1](../parciales/Parcial-01-Corte1) | En `parciales/` | [`INFORME.md`](../parciales/Parcial-01-Corte1/INFORME.md) y [`.docx`](../parciales/Parcial-01-Corte1/lisw2_parcial01_davilaE.docx) |
 | [Taller 8](Taller-08-PatronesDiseno) | Patrones de diseño: Builder, Adapter, Facade, State, Template Method y Decorator sobre un modelo propio de pregunta | En esta carpeta | [`INFORME.md`](Taller-08-PatronesDiseno/INFORME.md) y [`.docx`](Taller-08-PatronesDiseno/lisw2_t8_g2.docx) |
 | [Taller 9](Taller-09-ComunicacionSincronaAsincrona) | Comunicación síncrona (REST) y asíncrona (RabbitMQ) entre nueve microservicios Spring Boot, versión reducida del proyecto | En esta carpeta | [`INFORME.md`](Taller-09-ComunicacionSincronaAsincrona/INFORME.md) y [`.docx`](Taller-09-ComunicacionSincronaAsincrona/lisw2_taller09_g2.docx) |
+| [Taller 10](Taller-10-JPA) | Persistencia con JPA y H2 del banco de preguntas, con dominio sin anotaciones, repositorios abstractos y herencia `JOINED` | En esta carpeta | [`INFORME.md`](Taller-10-JPA/INFORME.md) y [`.docx`](Taller-10-JPA/lisw2_taller10_g2.docx) |
 
 ## Criterio para ubicar el código
 
