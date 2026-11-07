@@ -3,7 +3,7 @@
 Segundo parcial práctico del laboratorio de Ingeniería de Software II, de la ingeniera Paola Andrea Bedoya Toro. Hay 80 minutos para resolver tres
 puntos que juntan lo de los talleres 8, 9 y 10 sobre el banco de preguntas Saber Pro.
 
-- `lisw2_parcial02_davilaE/`: proyecto Maven con tres microservicios y un módulo de dominio.
+- `lisw2_parcial02_davilaE/`: proyecto Maven con tres microservicios y un módulo de dominio, tal como se entregó. Las pruebas de `src/test` se agregaron después.
 - `lisw2_parcial02_corteII_B.pdf`: enunciado del parcial (grupo B).
 - `lisw2_parcial02_davilaE.docx`: documento con las evidencias del proceso.
 - `INFORME.md` y `img/`: el mismo documento en Markdown, con sus capturas.
@@ -129,5 +129,24 @@ Después de la petición 6 se puede ver lo que pasó:
 - En la consola de H2 (http://localhost:8083/h2-console, url `jdbc:h2:mem:questiondb`, usuario `sa`, clave vacía),
   `SELECT * FROM QUESTIONS` muestra el estado en `PENDING_REVIEW`. Las opciones están en `ANSWER_OPTIONS`.
 
-El proyecto entregado no trae pruebas automáticas: la rúbrica pedía comprobarlo en Postman y en la consola de RabbitMQ, y las capturas están en
-[`INFORME.md`](INFORME.md).
+Las capturas de la prueba están en [`INFORME.md`](INFORME.md).
+
+## Pruebas automáticas (adicional, no se entregó)
+
+Esto no hizo parte de la entrega ni de la nota. El proyecto que se entregó no tenía pruebas automáticas, porque la rúbrica pedía comprobarlo en
+Postman y en la consola de RabbitMQ. Después del parcial se escribieron las pruebas y se agregaron a esta carpeta como complemento, sin cambiar nada del
+código entregado: solo son los archivos nuevos de `src/test` en cada módulo.
+
+| Módulo | Qué prueban |
+|---|---|
+| `saberpro-domain` | El Builder (4 opciones, una sola correcta, enunciado y opciones sin texto vacío) y las transiciones del State |
+| `validation-service` | La regla de la justificación (más de 15 caracteres) y el endpoint `POST /validate` |
+| `question-service` | Los casos de uso, el controlador, el mapeador entre `Question` y `QuestionRecord`, el repositorio JPA sobre H2, el cliente REST de validación, los mensajes y el flujo completo |
+| `lifecycle-service` | La transición al recibir el comando, la declaración de colas de RabbitMQ y el arranque del servicio |
+
+Son 72 pruebas y no necesitan RabbitMQ prendido. Se corren con:
+
+```bash
+cd lisw2_parcial02_davilaE
+mvn test
+```
