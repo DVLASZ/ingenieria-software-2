@@ -1,0 +1,141 @@
+{
+  "info": {
+    "name": "Saber PRO parcial corte 2",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "validation",
+      "value": "http://localhost:8082"
+    },
+    {
+      "key": "question",
+      "value": "http://localhost:8083"
+    },
+    {
+      "key": "questionId",
+      "value": "1"
+    }
+  ],
+  "item": [
+    {
+      "name": "1. validate, justificación válida (200, valid true)",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{validation}}/validate",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"justification\": \"El microkernel deja el núcleo mínimo y carga plugins\"\n}"
+        }
+      }
+    },
+    {
+      "name": "2. validate, justificación corta (200, valid false)",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{validation}}/validate",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"justification\": \"corta\"\n}"
+        }
+      }
+    },
+    {
+      "name": "3. crear pregunta válida (201, queda en DRAFT)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "if (pm.response.code === 201) {",
+              "  pm.collectionVariables.set('questionId', pm.response.json().id);",
+              "}"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{question}}/questions",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"statement\": \"¿Qué patrón separa el núcleo de los módulos?\",\n  \"justification\": \"El microkernel deja el núcleo mínimo y carga plugins\",\n  \"options\": [\n    { \"text\": \"Microkernel\", \"correct\": true },\n    { \"text\": \"Monolito\", \"correct\": false },\n    { \"text\": \"Singleton\", \"correct\": false },\n    { \"text\": \"Facade\", \"correct\": false }\n  ]\n}"
+        }
+      }
+    },
+    {
+      "name": "4. crear con justificación corta (400, no guarda)",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{question}}/questions",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"statement\": \"¿Qué es un microkernel?\",\n  \"justification\": \"corta\",\n  \"options\": [\n    { \"text\": \"a\", \"correct\": true },\n    { \"text\": \"b\", \"correct\": false },\n    { \"text\": \"c\", \"correct\": false },\n    { \"text\": \"d\", \"correct\": false }\n  ]\n}"
+        }
+      }
+    },
+    {
+      "name": "5. crear con 3 opciones (400, el Builder la rechaza)",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{question}}/questions",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"statement\": \"¿Qué es un microkernel?\",\n  \"justification\": \"una justificación bien larga\",\n  \"options\": [\n    { \"text\": \"a\", \"correct\": true },\n    { \"text\": \"b\", \"correct\": false },\n    { \"text\": \"c\", \"correct\": false }\n  ]\n}"
+        }
+      }
+    },
+    {
+      "name": "6. enviar a revisión (202 con operationId)",
+      "request": {
+        "method": "POST",
+        "url": "{{question}}/questions/{{questionId}}/submit"
+      }
+    },
+    {
+      "name": "7. enviar otra vez, ya está en PENDING_REVIEW (409)",
+      "request": {
+        "method": "POST",
+        "url": "{{question}}/questions/{{questionId}}/submit"
+      }
+    },
+    {
+      "name": "8. enviar una pregunta que no existe (404)",
+      "request": {
+        "method": "POST",
+        "url": "{{question}}/questions/99999/submit"
+      }
+    }
+  ]
+}
