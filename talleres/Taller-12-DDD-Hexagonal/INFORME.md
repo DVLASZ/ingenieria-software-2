@@ -119,7 +119,8 @@ co.edu.unicauca.saberpro
   application        PreguntaService
   infrastructure
     adapter.in.web                       PreguntaController, ApiExceptionHandler, dto
-    adapter.out.persistence.jpa          JpaQuestionAdapter, PreguntaJpaEntity, SpringDataPreguntaRepository
+    adapter.out.persistence.jpa          JpaQuestionAdapter, PreguntaJpaEntity,
+                                         SpringDataPreguntaRepository
     adapter.out.persistence.memory       InMemoryQuestionAdapter
     adapter.out.notification             ConsolaNotificadorAdapter
     config                               PersistenciaConfig, AplicacionConfig
