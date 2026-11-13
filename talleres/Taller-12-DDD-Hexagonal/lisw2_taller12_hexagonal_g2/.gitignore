@@ -2,3 +2,5 @@ target/
 *.class
 .idea/
 *.iml
+# el .gitignore de la raíz ignora out/, pero aquí adapter/out es código
+!**/adapter/out/
