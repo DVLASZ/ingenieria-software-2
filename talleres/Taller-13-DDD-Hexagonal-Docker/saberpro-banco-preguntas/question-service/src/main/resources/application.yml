@@ -1,0 +1,29 @@
+spring:
+  application:
+    name: question-service
+  datasource:
+    url: jdbc:h2:mem:questiondb
+    username: sa
+    password:
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    open-in-view: false
+  h2:
+    console:
+      enabled: true
+  rabbitmq:
+    host: ${SPRING_RABBITMQ_HOST:localhost}
+    port: 5672
+    username: guest
+    password: guest
+
+server:
+  port: 8083
+
+validation:
+  service:
+    url: ${VALIDATION_SERVICE_URL:http://localhost:8082}
+
+saberpro:
+  persistencia: ${SABERPRO_PERSISTENCIA:jpa}
