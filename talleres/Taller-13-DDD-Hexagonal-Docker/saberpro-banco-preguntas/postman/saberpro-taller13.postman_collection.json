@@ -1,0 +1,104 @@
+{
+  "info": {
+    "name": "Banco de preguntas Saber Pro, Taller 13",
+    "description": "Se corren en orden con los cuatro contenedores arriba. La 3 y la 6 guardan el id que usan las siguientes.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "question", "value": "http://localhost:8083" },
+    { "key": "validation", "value": "http://localhost:8082" },
+    { "key": "lifecycle", "value": "http://localhost:8084" },
+    { "key": "preguntaId", "value": "" },
+    { "key": "preguntaTresId", "value": "" }
+  ],
+  "item": [
+    {
+      "name": "1. Listar preguntas (200)",
+      "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": ["pm.test('200 OK', () => pm.response.to.have.status(200));"] } }],
+      "request": { "method": "GET", "url": "{{question}}/api/preguntas" }
+    },
+    {
+      "name": "2. Validar justificación corta (valid false)",
+      "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": ["pm.test('200 con valid false', () => { pm.response.to.have.status(200); pm.expect(pm.response.json().valid).to.eql(false); });"] } }],
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": { "mode": "raw", "raw": "{\n  \"justification\": \"corta\"\n}" },
+        "url": "{{validation}}/validate"
+      }
+    },
+    {
+      "name": "3. Crear pregunta válida (201)",
+      "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": [
+        "pm.test('201 Created', () => pm.response.to.have.status(201));",
+        "pm.test('queda en BORRADOR', () => pm.expect(pm.response.json().estado).to.eql('BORRADOR'));",
+        "pm.collectionVariables.set('preguntaId', pm.response.json().id);"
+      ] } }],
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": { "mode": "raw", "raw": "{\n  \"enunciado\": \"¿Qué separa el dominio de la infraestructura?\",\n  \"justificacion\": \"El puerto es el contrato que define el dominio\",\n  \"opciones\": [\n    { \"texto\": \"Un puerto\", \"correcta\": true },\n    { \"texto\": \"Una tabla\", \"correcta\": false },\n    { \"texto\": \"Un controlador\", \"correcta\": false },\n    { \"texto\": \"Un script\", \"correcta\": false }\n  ]\n}" },
+        "url": "{{question}}/api/preguntas"
+      }
+    },
+    {
+      "name": "4. Crear con justificación corta (400)",
+      "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": ["pm.test('400 Bad Request', () => pm.response.to.have.status(400));"] } }],
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": { "mode": "raw", "raw": "{\n  \"enunciado\": \"¿Qué es un puerto?\",\n  \"justificacion\": \"corta\",\n  \"opciones\": []\n}" },
+        "url": "{{question}}/api/preguntas"
+      }
+    },
+    {
+      "name": "5. Crear borrador con 3 opciones (201)",
+      "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": [
+        "pm.test('201 Created', () => pm.response.to.have.status(201));",
+        "pm.collectionVariables.set('preguntaTresId', pm.response.json().id);"
+      ] } }],
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": { "mode": "raw", "raw": "{\n  \"enunciado\": \"¿Qué es un adaptador?\",\n  \"justificacion\": \"Traduce entre el puerto y la tecnología\",\n  \"opciones\": [\n    { \"texto\": \"A\", \"correcta\": true },\n    { \"texto\": \"B\", \"correcta\": false },\n    { \"texto\": \"C\", \"correcta\": false }\n  ]\n}" },
+        "url": "{{question}}/api/preguntas"
+      }
+    },
+    {
+      "name": "6. Enviar a revisión la de 3 opciones (400)",
+      "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": ["pm.test('400 por las 4 opciones', () => pm.response.to.have.status(400));"] } }],
+      "request": { "method": "POST", "url": "{{question}}/api/preguntas/{{preguntaTresId}}/enviar-revision" }
+    },
+    {
+      "name": "7. Enviar a revisión la pregunta completa (202)",
+      "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": [
+        "pm.test('202 Accepted', () => pm.response.to.have.status(202));",
+        "pm.test('trae operationId', () => pm.expect(pm.response.json().operationId).to.be.a('string'));"
+      ] } }],
+      "request": { "method": "POST", "url": "{{question}}/api/preguntas/{{preguntaId}}/enviar-revision" }
+    },
+    {
+      "name": "8. Consultar: ya está en PENDIENTE_REVISION (200)",
+      "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": [
+        "pm.test('200 OK', () => pm.response.to.have.status(200));",
+        "pm.test('lifecycle-service confirmó el cambio', () => pm.expect(pm.response.json().estado).to.eql('PENDIENTE_REVISION'));"
+      ] } }],
+      "request": { "method": "GET", "url": "{{question}}/api/preguntas/{{preguntaId}}" }
+    },
+    {
+      "name": "9. Enviar otra vez (400)",
+      "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": ["pm.test('400, ya no está en BORRADOR', () => pm.response.to.have.status(400));"] } }],
+      "request": { "method": "POST", "url": "{{question}}/api/preguntas/{{preguntaId}}/enviar-revision" }
+    },
+    {
+      "name": "10. Consultar una que no existe (404)",
+      "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": ["pm.test('404 Not Found', () => pm.response.to.have.status(404));"] } }],
+      "request": { "method": "GET", "url": "{{question}}/api/preguntas/no-existe" }
+    },
+    {
+      "name": "11. Salud de lifecycle-service (200)",
+      "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": ["pm.test('UP', () => pm.expect(pm.response.json().status).to.eql('UP'));"] } }],
+      "request": { "method": "GET", "url": "{{lifecycle}}/actuator/health" }
+    }
+  ]
+}

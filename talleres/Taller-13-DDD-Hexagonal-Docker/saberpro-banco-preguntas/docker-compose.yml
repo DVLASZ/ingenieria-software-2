@@ -1,0 +1,62 @@
+name: saberpro
+
+networks:
+  saberpro-net:
+    driver: bridge
+
+services:
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: saberpro-rabbitmq
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "-q", "check_port_listener", "5672"]
+      interval: 10s
+      timeout: 10s
+      retries: 12
+      start_period: 20s
+    networks:
+      - saberpro-net
+
+  validation-service:
+    build: ./validation-service
+    container_name: saberpro-validation-service
+    ports:
+      - "8082:8082"
+    restart: on-failure
+    networks:
+      - saberpro-net
+
+  question-service:
+    build: ./question-service
+    container_name: saberpro-question-service
+    ports:
+      - "8083:8083"
+    environment:
+      - SPRING_RABBITMQ_HOST=rabbitmq
+      - VALIDATION_SERVICE_URL=http://validation-service:8082
+      - SABERPRO_PERSISTENCIA=${SABERPRO_PERSISTENCIA:-jpa}
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+      validation-service:
+        condition: service_started
+    restart: on-failure
+    networks:
+      - saberpro-net
+
+  lifecycle-service:
+    build: ./lifecycle-service
+    container_name: saberpro-lifecycle-service
+    ports:
+      - "8084:8084"
+    environment:
+      - SPRING_RABBITMQ_HOST=rabbitmq
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+    restart: on-failure
+    networks:
+      - saberpro-net
