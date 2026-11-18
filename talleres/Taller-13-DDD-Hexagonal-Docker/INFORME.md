@@ -97,18 +97,24 @@ JPA son los del árbol de la guía.
 ```text
 question-service/src/main/java/co/edu/unicauca/saberpro/question/
   domain/
-    model/             Pregunta, Enunciado, Justificacion, OpcionRespuesta, EstadoPregunta
-    exception/         DomainException, ReglaNegocioException, PreguntaNoEncontradaException, ServicioNoDisponibleException
-    ports/inbound/     CrearPreguntaUseCase, EvaluarPreguntaUseCase, ConsultarPreguntaUseCase
-    ports/outbound/    PreguntaRepositoryPort, NotificacionPort, ValidacionJustificacionPort
-  application/         QuestionApplicationService
+    model/            Pregunta, Enunciado, Justificacion, OpcionRespuesta,
+                      EstadoPregunta
+    exception/        DomainException, ReglaNegocioException,
+                      PreguntaNoEncontradaException,
+                      ServicioNoDisponibleException
+    ports/inbound/    CrearPreguntaUseCase, EvaluarPreguntaUseCase,
+                      ConsultarPreguntaUseCase
+    ports/outbound/   PreguntaRepositoryPort, NotificacionPort,
+                      ValidacionJustificacionPort
+  application/        QuestionApplicationService
   infrastructure/
-    jpa/               QuestionRecord, AnswerOptionRecord, QuestionDomainMapper, JpaQuestionAdapter
-    memory/            InMemoryQuestionAdapter
-    messaging/         RabbitMQPublisher, QuestionStatusListener, RabbitConfig
-    rest/              ValidationRestClient, RestClientConfig
-    config/            PersistenciaConfig, AplicacionConfig
-  api/                 QuestionRestController, ApiExceptionHandler, dto
+    jpa/              QuestionRecord, AnswerOptionRecord,
+                      QuestionDomainMapper, JpaQuestionAdapter
+    memory/           InMemoryQuestionAdapter
+    messaging/        RabbitMQPublisher, QuestionStatusListener, RabbitConfig
+    rest/             ValidationRestClient, RestClientConfig
+    config/           PersistenciaConfig, AplicacionConfig
+  api/                QuestionRestController, ApiExceptionHandler, dto
 ```
 
 ### 4.2 Puertos y adaptadores
