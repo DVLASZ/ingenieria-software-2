@@ -10,6 +10,6 @@ los levanta con Docker Compose en la red saberpro-net. Entrega el 18 de noviembr
 | [`INFORME.md`](INFORME.md) | El informe: trazabilidad, dominio, hexágono, Docker, flujo de punta a punta, intercambiabilidad, C4 y pruebas |
 | [`lisw2_taller13_g2.docx`](lisw2_taller13_g2.docx) | El mismo informe en la plantilla oficial |
 | [`img/`](img/) | Los diagramas C4 y las capturas del informe |
-| Video | [Sustentación en YouTube](https://www.youtube.com/watch?v=fAi0qf4DYCg) |
+| Video | [`VIDEO.md`](VIDEO.md), [sustentación en YouTube](https://www.youtube.com/watch?v=fAi0qf4DYCg) |
 
 Para correrlo: `docker compose up -d --build` dentro de `saberpro-banco-preguntas`, con Docker instalado.
